@@ -178,7 +178,7 @@
   display: block;
 }
 
-@media screen and (max-width: 1104px) {
+@media screen and (max-width: 1280px) {
   .bs-docs-sidebar {
     display: none
   }

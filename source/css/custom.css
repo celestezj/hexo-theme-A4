@@ -8,3 +8,95 @@
     justify-content: flex-start;
     align-content: center;
 }
+/*new add ↓*/
+/*pre code预格式化文本块文字颜色*/
+.post-md pre code {
+    color: rgb(197, 195, 189);
+}
+/*mermaid流程图背景颜色*/
+.post-md pre.mermaid {
+    background: #ffffff;
+}
+/*mermaid流程图不显示边框*/
+.post-md pre.mermaid {
+    border: none;
+}
+/*行间公式样式*/
+.math-display {
+  display: block;
+  text-align: center;
+  margin: 12px 0 22px 0;
+}
+/* 行内图片，和文字对齐、不变形 */
+img.inline {
+  display: inline-block !important;
+  vertical-align: middle !important;
+  margin: 0 4px !important;
+  object-fit: contain !important; /* 防拉伸变形，必须加 */
+}
+/* 居中大图，独占一行、居中显示 */
+img.center {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  object-fit: contain !important;
+}
+/* 只针对：懒加载中 + 带有 data-original 的图片（即 loading 图）
+* 强制不让 loading 图被你的居中样式撑大
+* 不影响任何正常图片！
+*/
+img[data-original] {
+  max-width: 48px !important;
+  max-height: 48px !important;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  margin: 20px auto !important;
+  object-fit: none !important;
+}
+/*懒加载失败的占位图，不允许被修改原有尺寸*/
+img[data-loaded="false"] {
+  max-width: none !important;
+  width: auto !important;
+  height: auto !important;
+}
+/* 图片注释文字 */
+.img-caption {
+  font-size: 0.85rem;
+  color: #777;
+  margin: 6px 0 16px 0;
+  line-height: 1.5;
+}
+/* 图片注释文字：居中 */
+.img-caption-center {
+  text-align: center;
+}
+/* 图片注释文字：靠左 */
+.img-caption-left {
+  text-align: left;
+}
+/* 高级质感代码块滚动条 */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8b8b8b, #8b8b8b);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #524d4d, #524d4d);
+}
+/* 左侧目录容器宽度控制 - 防止溢出遮盖正文，太长的标题会显示省略号 */
+.left-toc-container {
+  width: 19% !important;
+  max-width: 19% !important;
+}
+.left-toc-container #toc li.tocify-item, .left-toc-container #toc .tocify-subheader {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  position: relative !important;
+}
