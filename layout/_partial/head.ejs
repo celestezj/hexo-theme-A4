@@ -28,7 +28,7 @@
             paths: get_list_from_config(theme.resources.theme.optional_css.returnToTop)
         },
         leftToc: {
-            check: theme.tool.leftToc,
+            check: is_post() && (!('leftToc' in page) || page.leftToc == true) && theme.tool.leftToc,
             path: theme.resources.theme.optional_css.leftToc
         },
         returnToLast: {

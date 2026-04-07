@@ -73,7 +73,7 @@ var optionalJsFiles = {
         paths: ['js/returnToLastPage.js']
     },
     leftToc: {
-        check: theme.tool.leftToc,
+        check: is_post() && (!('leftToc' in page) || page.leftToc == true) && theme.tool.leftToc,
         libs: ['jquery', 'jquery-ui', 'jquery-tocify'],
         paths: ['js/toc.js']
     }

@@ -179,7 +179,10 @@
 }
 
 @media screen and (max-width: 1280px) {
-  .bs-docs-sidebar {
+  /*.bs-docs-sidebar {
+    display: none
+  }*/
+  .left-toc-container {
     display: none
   }
 }

@@ -100,3 +100,32 @@ img[data-loaded="false"] {
   text-overflow: ellipsis !important;
   position: relative !important;
 }
+/*标题尺寸修改*/
+.post-main-title, .post-md h1 {
+    font-size: 1.9rem;
+}
+.post-md h2 {
+    font-size: 1.7rem;
+}
+.post-md h3 {
+    font-size: 1.55rem;
+}
+.post-md h4 {
+    font-size: 1.4rem;
+}
+.post-md h5 {
+    font-size: 1.25rem;
+}
+.post-md h6 {
+    font-size: 1.1rem;
+}
+/* 全局表格行高优化 */
+table td, table th {
+  padding: 6px 12px !important; /* 上下内边距从默认15px改成6px，直接压缩高度 */
+  line-height: 1.4 !important;  /* 行高收紧，文字更紧凑 */
+  vertical-align: middle;       /* 文字垂直居中，更美观 */
+}
+/* 可选：给表格加轻微内边距，避免太挤 */
+table {
+  margin: 1em 0;
+}
