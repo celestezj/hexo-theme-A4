@@ -6,8 +6,12 @@
     font-weight: 600;
     src: local(""),
         url("../fonts/notoserifsc-medium-webfont.woff2") format("woff2"),  /* Chrome 26+, Opera 23+, Firefox 39+ */
-        url("../fonts/notoserifsc-medium-webfont.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
-    ;
+        url("../fonts/notoserifsc-medium-webfont.woff") format("woff"), /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+        url("https://cdn.jsdelivr.net/gh/celestezj/celestezj.github.io@latest/fonts/notoserifsc-medium-webfont.woff2") format("woff2"),
+        /*url("https://cdn.statically.io/gh/celestezj/celestezj.github.io@master/fonts/notoserifsc-medium-webfont.woff2") format("woff2"),*/
+        url("https://cdn.jsdelivr.net/gh/celestezj/celestezj.github.io@latest/fonts/notoserifsc-medium-webfont.woff") format("woff")/*,
+        url("https://cdn.statically.io/gh/celestezj/celestezj.github.io@master/fonts/notoserifsc-medium-webfont.woff") format("woff")*/;
+    font-display: swap;
 }
 
 
@@ -25,18 +29,24 @@
     font-family: "Local LXGW WenKai";
     font-style: normal;
     font-weight: 600;
-    src: local("../fonts/LXGWWenKaiLite-Regular.woff2"),
+    src: local("LXGW WenKai Lite"),
         url("../fonts/LXGWWenKaiLite-Regular.woff2") format("woff2"),
-        url("../fonts/LXGWWenKaiMono-Regular.woff2") format("woff2"),
-        url("https://jsd.cdn.zzko.cn/gh/hininojay/images/source/img/a4color/LXGWWenKaiLite-Regular.woff2") format("woff2"),
-        url("https://jsd.cdn.zzko.cn/gh/hininojay/images/source/img/a4color/LXGWWenKaiMono-Regular.woff2") format("woff2");
+        url("https://cdn.jsdelivr.net/gh/celestezj/celestezj.github.io@latest/fonts/LXGWWenKaiLite-Regular.woff2") format("woff2"),
+        /*url("https://cdn.statically.io/gh/celestezj/celestezj.github.io@master/fonts/LXGWWenKaiLite-Regular.woff2") format("woff2"),*/
+        /*url("https://cdn.statically.io/gh/celestezj/LxgwWenKai-Lite@master/fonts/TTF/LXGWWenKaiLite-Regular.ttf") format("truetype"),*/
+        url("https://cdn.jsdelivr.net/gh/celestezj/LxgwWenKai-Lite@latest/fonts/TTF/LXGWWenKaiLite-Regular.ttf") format("truetype")/*,
+        url("https://cdn.statically.io/gh/sherlcok314159/Files_@main/LXGWWenKaiMono-Regular.woff2") format("woff2"),
+        url("../fonts/LXGWWenKaiMono-Regular.woff2") format("woff2")*/;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Local LXGW WenKai Bold";
     font-style: normal;
     font-weight: bold;
-    src: local("../fonts/LXGWWenKaiLite-Bold.woff2"),
+    src: local("LXGW WenKai"),
         url("../fonts/LXGWWenKaiLite-Bold.woff2") format("woff2"),
-        url("https://jsd.cdn.zzko.cn/gh/hininojay/images/source/img/a4color/LXGWWenKaiLite-Bold.woff2") format("woff2");
+        url("https://cdn.jsdelivr.net/gh/celestezj/celestezj.github.io@latest/fonts/LXGWWenKaiLite-Bold.woff2") format("woff2")/*,
+        url("https://cdn.statically.io/gh/celestezj/celestezj.github.io@master/fonts/LXGWWenKaiLite-Bold.woff2") format("woff2")*/;
+    font-display: swap;
 }

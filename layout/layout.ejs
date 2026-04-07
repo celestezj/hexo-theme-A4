@@ -8,7 +8,38 @@
 
     <body>
         <% if(theme.tool.darkMode) { %>
-        <script src="https://cdn.jsdelivr.net/npm/darkreader@4.9.80/darkreader.min.js"></script>
+        <script src='<%- cdn_lib_url("darkreader") %>'></script><!--这个js会有跨域问题（不会造成功能问题，就是浏览器控制台会报错而已）-->
+        <script>
+            // 拦截 DarkReader 所有报错
+            const originalError = console.error;
+            console.error = function(...args) {
+            try {
+                // 只要是来自 darkreader 的错误，直接拦截
+                const errStr = args.join(' ');
+                if (
+                errStr.includes('darkreader') ||
+                errStr.includes('Dark Reader') ||
+                errStr.includes('cross-origin') ||
+                errStr.includes('Could not establish connection') ||
+                errStr.includes('Receiving end does not exist')
+                ) {
+                return;
+                }
+            } catch (e) {}
+            originalError.apply(console, args);
+            };
+
+            // 重点：强制让 DarkReader 不尝试跨域请求（根源解决）
+            if (window.DarkReader) {
+            DarkReader.setFetchMethod(async (url) => {
+                try {
+                return await fetch(url, { mode: 'no-cors' });
+                } catch {
+                return new Response(new Blob(), { status: 200, statusText: "OK" });
+                }
+            });
+            }
+        </script>
         <script>
             const drOptions = {
                 brightness: 100,
@@ -152,8 +183,15 @@
             <% } %>
     </body>
 </html>
-<script src="<%= url_for('/js/emojiHandler.js') %>"></script>
-<script src="<%= url_for('/js/search.js') %>"></script>
+<% if (is_cdn_enabled()) { %>
+    <%#- js(cdn_theme_url('js/emojiHandler.js')) %>
+    <%#- js(cdn_theme_url('js/search.js')) %>
+    <script src="<%= cdn_theme_url('js/emojiHandler.js') %>"></script>
+    <!--script src="<%= cdn_theme_url('js/search.js') %>"></script-->
+<% } else { %>
+    <script src="<%= url_for('/js/emojiHandler.js') %>"></script>
+    <!--script src="<%= url_for('/js/search.js') %>"></script--><!--暂不支持搜索-->
+<% } %>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         wrapEmojis('.paper');

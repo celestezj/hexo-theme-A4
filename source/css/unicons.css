@@ -1,11 +1,13 @@
 @font-face {
   font-family: 'unicons';
-  src: local("../fonts/unicons.woff2"),
+  src: local("unicons"),
     url("../fonts/unicons.woff2") format("woff2"),
-    url('https://jsd.cdn.zzko.cn/npm/hexo-theme-a4@latest/source/fonts/unicons.woff2') format('woff2');
+    url("https://cdn.jsdelivr.net/npm/hexo-theme-a4@latest/source/fonts/unicons.woff2") format("woff2"),
+    url('https://unpkg.com/hexo-theme-a4@latest/source/fonts/unicons.woff2') format('woff2');
     
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 /* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
 /* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
