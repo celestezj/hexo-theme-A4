@@ -84,10 +84,10 @@ img[data-loaded="false"] {
   background: rgba(0, 0, 0, 0.04);
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #8b8b8b, #8b8b8b);
+  background: linear-gradient(180deg, #524d4d, #524d4d); /*#8b8b8b, #8b8b8b*/
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #524d4d, #524d4d);
+  background: linear-gradient(180deg, #8b8b8b, #8b8b8b); /*#524d4d, #524d4d*/
 }
 /* 左侧目录容器宽度控制 - 防止溢出遮盖正文，太长的标题会显示省略号 */
 .left-toc-container {
