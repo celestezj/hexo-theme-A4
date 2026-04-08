@@ -9,8 +9,8 @@
     <body>
         <% if(theme.tool.darkMode) { %>
         <script src='<%- cdn_lib_url("darkreader") %>'></script><!--这个js会有跨域问题（不会造成功能问题，就是浏览器控制台会报错而已）-->
-        <script>
-            // 拦截 DarkReader 所有报错
+        <!--script>
+            // 拦截 DarkReader 所有报错（PS：不需要这段代码了，豆包给了一个跨域修复的方案，就加一行代码：DarkReader.setFetchMethod(window.fetch);）
             const originalError = console.error;
             console.error = function(...args) {
             try {
@@ -39,7 +39,7 @@
                 }
             });
             }
-        </script>
+        </script-->
         <script>
             const drOptions = {
                 brightness: 100,
@@ -49,6 +49,7 @@
                 darkSchemeBackgroundColor: '#1e1e1e', // 黑板灰背景
                 scrollbarStyle: 'native'
             };
+            DarkReader.setFetchMethod(window.fetch);
 
             const savedTheme = localStorage.getItem('theme');
             const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
