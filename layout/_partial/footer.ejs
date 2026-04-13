@@ -153,6 +153,56 @@ if (window.mermaid) {
 </script>
 <% } %>
 
+<script>
+const tabsFn = {
+  clickFnOfTabs: function () {
+    document.querySelectorAll('.paper .tab > button').forEach(function (item) {
+      item.addEventListener('click', function (e) {
+        const $this = this
+        const $tabItem = $this.parentNode
+
+        if (!$tabItem.classList.contains('active')) {
+          const $tabContent = $tabItem.parentNode.nextElementSibling
+          const $siblings = Array.from($tabItem.parentNode.children).filter(el => el.classList.contains('active'))
+          if ($siblings.length > 0) {
+            $siblings[0].classList.remove('active')
+          }
+          $tabItem.classList.add('active')
+          const tabId = $this.getAttribute('data-href').replace('#', '')
+          const childList = Array.from($tabContent.children)
+          childList.forEach(item => {
+            if (item.id === tabId) {
+              item.classList.add('active')
+            } else {
+              item.classList.remove('active')
+            }
+          })
+        }
+      })
+    })
+  }/*,
+
+  backToTop: () => {
+    document.querySelectorAll('.paper .tabs .tab-to-top').forEach(function (item) {
+      item.addEventListener('click', function () {
+        const tabsElement = this.closest('.tabs')
+        const topPosition = tabsElement.getBoundingClientRect().top + window.scrollY
+        window.scrollTo({
+          top: topPosition,
+          behavior: 'smooth'
+        })
+      })
+    })
+  }*/
+}
+
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', function () {
+  tabsFn.clickFnOfTabs()
+  /*tabsFn.backToTop()*/
+})
+</script>
+
 <% if(theme.postInfo.viewCount) { %>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> 
 <% } %>

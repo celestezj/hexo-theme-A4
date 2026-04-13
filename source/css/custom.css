@@ -295,3 +295,101 @@ span[alt='wavy'] {
     text-decoration-line: underline;
     text-decoration-color: #000;
 }
+/* ========================
+   Tabs 标签页 - 适配 hexo-theme-A4
+======================== 
+从butterfly主题迁移步骤：
+1. css: https://github.com/celestezj/Butterfly_3.7.0/blob/master/themes/butterfly/source/css/_tags/tabs.styl
+2. hexo tags: https://github.com/celestezj/Butterfly_3.7.0/blob/master/themes/butterfly/scripts/tag/tabs.js
+3. javascript: https://github.com/celestezj/Butterfly_3.7.0/blob/master/themes/butterfly/source/js/main.js（tabsFn）
+*/
+.paper .tabs {
+  position: relative;
+  margin: 1rem 0;
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.paper .tabs > .nav-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  background: #fafafa;
+  /*border-bottom: 1px solid #d8d8d8;*/
+}
+.paper .tabs > .nav-tabs > .tab {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (max-width: 768px) {
+  .paper .tabs > .nav-tabs > .tab {
+    flex-grow: 1;
+  }
+}
+.paper .tabs > .nav-tabs > .tab button {
+  display: block;
+  padding: .5rem 1rem;
+  width: 100%;
+  border: none;
+  border-top: 2px solid transparent;
+  background: #fafafa;
+  color: #444;
+  line-height: 2;
+  transition: all .28s ease;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+.paper .tabs > .nav-tabs > .tab button i {
+  width: 1.5em;
+}
+.paper .tabs > .nav-tabs > .tab.active button {
+  border-top: 2px solid #444;
+  background: #ffffff;
+  color: #222;
+  cursor: default;
+}
+.paper .tabs > .nav-tabs > .tab:not(.active) button:hover {
+  /*border-top: 2px solid #888;*/
+  background: #f0f0f0;
+}
+.paper .tabs > .tab-contents .tab-item-content {
+  position: relative;
+  display: none;
+  padding: 1.8rem 1.2rem;
+  background: #ffffff;
+}
+@media (max-width: 768px) {
+  .paper .tabs > .tab-contents .tab-item-content {
+    padding: 1.2rem .7rem;
+  }
+}
+.paper .tabs > .tab-contents .tab-item-content.active {
+  display: block;
+  animation: tabshow .5s;
+}
+/*.paper .tabs .tab-to-top {
+  position: relative;
+  display: block;
+  margin: 0 0 0 auto;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  background: transparent !important;
+  border: none !important;
+  padding: 4px 8px !important;
+  border-radius: 4px !important;
+  outline: none !important;
+}*/
+@keyframes tabshow {
+  0% {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
