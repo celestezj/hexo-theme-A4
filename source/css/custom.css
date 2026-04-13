@@ -129,3 +129,169 @@ table td, table th {
 table {
   margin: 1em 0;
 }
+/*details折叠标签（https://github.com/muggledy/typora-dyzj-theme/blob/master/source/dyzj.css）*/
+details {
+    display: block;
+    padding: 16px;
+    margin: 1em 0;
+    border-radius: 4px;
+    background: #ffffff;
+    font-size: 14px;
+    -webkit-transition: all .28s ease;
+    -moz-transition: all .28s ease;
+    -o-transition: all .28s ease;
+    -ms-transition: all .28s ease;
+    transition: all .28s ease;
+    -moz-transition: all .28s ease;
+    -webkit-transition: all .28s ease;
+    -o-transition: all .28s ease;
+    border: 1px solid #d8d8d8;
+}
+details summary {
+    display: list-item;
+    cursor: pointer;
+    padding: 16px;
+    margin: -16px;
+    border-radius: 4px;
+    color: rgba(68,68,68,.7);
+    font-size: .875rem!important;
+    font-weight: 700;
+    position: relative;
+    line-height: normal;
+}
+details>summary {
+    background: #fafafa;
+}
+details[open] {
+    border-color: #d8d8d8;
+}
+details[open]>summary {
+    color: #444;
+    margin-bottom: 0;
+}
+details[open]>summary {
+    border-bottom: 1px solid #d8d8d8;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+/* diff 代码高亮 - 纯文字颜色，无背景，完全匹配 Git Diff */
+.highlight.diff .addition {
+  color: #28a745 !important;
+  background: transparent !important;
+  font-weight: normal !important;
+}
+.highlight.diff .deletion {
+  color: #d73a4a !important;
+  background: transparent !important;
+  font-weight: normal !important;
+}
+/*时间轴（来自Volantis主题）*/
+div[alt="timeline"] {
+    margin-top: 8px;
+    margin-left: 8px;
+}
+div[alt="timenode"] {
+    position: relative;
+}
+div[alt="timenode"]:after, div[alt="timenode"]:before {
+    content: "";
+    z-index: 1;
+    position: absolute;
+    background: rgba(150,150,150,.3); /* 只改色：浅灰线 */
+    width: 2px;
+    left: 7px;
+}
+div[alt="timenode"]:before {
+    top: 0px;
+    height: 6px;
+}
+div[alt="timenode"] div[alt="body"], div[alt="timenode"] div[alt="meta"] {
+    max-width: calc(100% - 24px);
+}
+div[alt="timenode"] div[alt="meta"] {
+    position: relative;
+    color: #000000;
+    line-height: 32px;
+    font-size: .8rem;
+    font-weight: 700;
+    margin: 0 0 0 24px;
+}
+div[alt="timenode"] div[alt="meta"]:after, div[alt="timenode"] div[alt="meta"]:before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    z-index: 2;
+    left: -24px;
+}
+div[alt="timenode"] div[alt="meta"]:before {
+    background: rgba(150,150,150,.3); /* 只改色：浅灰圈 */
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+}
+div[alt="timenode"] div[alt="meta"]:after {
+    background: #666; /* 只改色：深灰点 */
+    margin-left: 2px;
+    margin-top: 2px;
+    width: 12px;
+    height: 12px;
+    border-radius: 6px;
+    -webkit-transform: scale(.5);
+    -moz-transform: scale(.5);
+    -o-transform: scale(.5);
+    -ms-transform: scale(.5);
+    transform: scale(.5);
+}
+div[alt="timenode"] div[alt="body"] {
+    margin: 4px 0 10px 24px;
+    padding: 10px;
+    border-radius: 12px;
+    background: #efeded;
+    display: inline-block;
+    font-size: .9rem;
+}
+div[alt="timenode"] div[alt="body"] p, div[alt="timenode"] div[alt="meta"] p, div[alt="timeline"] p {
+  margin: 0 !important; /* 修复时间轴内容段落间距 */
+  width: 100%;
+}
+div[alt="timenode"]:not(:last-child):after {
+    top: 26px;
+    height: calc(100% - 26px);
+}
+div[alt="timenode"]:last-child:after {
+    top: 26px;
+    height: calc(100% - 30px);
+}
+div[alt="timenode"]:hover div[alt="meta"]{
+    color: #000000;
+}
+div[alt="timenode"]:hover div[alt="meta"]:before{
+    background:rgba(100,100,100,.4) /* 只改色：hover 灰圈 */
+}
+div[alt="timenode"]:hover div[alt="meta"]:after{
+    background:#333;-webkit-transform:scale(.8); /* 只改色：hover 黑点 */
+    -moz-transform:scale(.8);
+    -o-transform:scale(.8);
+    -ms-transform:scale(.8);
+    transform:scale(.8);
+}
+/*按键样式*/
+kbd {
+    font: 'monospace';
+    font-size: .88em;
+    background: white;
+    color: #000000;
+    border-radius: 5px;
+}
+/*强调型文本*/
+span[alt='emp'] {
+    border-bottom: 4px dotted #000;
+}
+span[alt='underline'] {
+    border-bottom: 2px solid #000;
+}
+span[alt='wavy'] {
+    text-decoration-style: wavy;
+    text-decoration-line: underline;
+    text-decoration-color: #000;
+}
