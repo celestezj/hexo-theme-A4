@@ -307,8 +307,9 @@ span[alt='wavy'] {
   position: relative;
   margin: 1rem 0;
   border: 1px solid #d8d8d8;
-  border-radius: 4px;
-  overflow: hidden;
+  border-radius: 2px;
+  /*overflow: hidden;*/
+  overflow: visible;        /* 允许按钮边框盖在外面(新需求：按钮上方边框覆盖对应区域的.tabs上方边框) */
 }
 .paper .tabs > .nav-tabs {
   display: flex;
@@ -350,6 +351,10 @@ span[alt='wavy'] {
   background: #ffffff;
   color: #222;
   cursor: default;
+  /* 核心：只让按钮上移 1px，覆盖 tabs 上边框 */
+  position: relative;
+  top: -1px;
+  margin-top: -1px;
 }
 .paper .tabs > .nav-tabs > .tab:not(.active) button:hover {
   /*border-top: 2px solid #888;*/
@@ -385,11 +390,15 @@ span[alt='wavy'] {
 }*/
 @keyframes tabshow {
   0% {
-    transform: translateY(15px);
+    transform: translateY(2px);
     opacity: 0;
   }
   100% {
     transform: translateY(0);
     opacity: 1;
   }
+}
+/* 只有上一篇时，强制居左 */
+.post-footer-pre-next > span:only-child {
+  margin-right: auto;
 }
