@@ -12,6 +12,11 @@
     </div>
 <% } %>
 
+<%
+// 获取CDN开关配置
+var cdnEnabled = is_cdn_enabled();
+%>
+
 <div class="header">
     <div class="header-container">
         <style>
@@ -40,7 +45,11 @@
             alt="^-^" 
             cache-control="max-age=86400" 
             class="header-img" 
-            src="<%- url_for(theme.favicon) %>" 
+            <% if (cdnEnabled) { %>
+                src="<%- cdn_theme_url(theme.favicon) %>" 
+            <% } else { %>
+                src="<%- url_for(theme.favicon) %>" 
+            <% } %>
         />
         <div class="header-content">
             <a class="logo" href="<%- url_for() %>"><%= config.title %></a> 

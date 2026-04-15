@@ -3,13 +3,18 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport" />
     <meta name="description" content="<%= page.title %>" />
     <meta name="hexo-theme-A4" content="<%= theme.version %>" />
-    <link rel="alternate icon" type="image/webp" href="<%- url_for(theme.favicon) %>">
-    <title><%= (theme.displayTitleInTab && page.title ? page.title + ' | ' : '') + config.title + (config.subtitle ? ' | ' + config.subtitle : '') %></title>
-
     <%
     // 获取CDN开关配置
     var cdnEnabled = is_cdn_enabled();
+    %>
+    <% if (cdnEnabled) { %>
+        <link rel="alternate icon" type="image/webp" href="<%- cdn_theme_url(theme.favicon) %>">
+    <% } else { %>
+        <link rel="alternate icon" type="image/webp" href="<%- url_for(theme.favicon) %>">
+    <% } %>
+    <title><%= (theme.displayTitleInTab && page.title ? page.title + ' | ' : '') + config.title + (config.subtitle ? ' | ' + config.subtitle : '') %></title>
 
+    <%
     // 从配置中获取CSS文件列表
     var baseCssFiles = get_list_from_config(theme.resources.theme.head_css);
 
