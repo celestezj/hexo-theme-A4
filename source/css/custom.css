@@ -355,6 +355,8 @@ span[alt='wavy'] {
   position: relative;
   top: -1px;
   margin-top: -1px;
+  padding-bottom: calc(0.5rem + 2px); /* 加高底部内边距 */
+  margin-bottom: -2px; /* 👇 关键：把按钮往下拉长 2px，盖住下方缝隙 */
 }
 .paper .tabs > .nav-tabs > .tab:not(.active) button:hover {
   /*border-top: 2px solid #888;*/
@@ -401,4 +403,11 @@ span[alt='wavy'] {
 /* 只有上一篇时，强制居左 */
 .post-footer-pre-next > span:only-child {
   margin-right: auto;
+}
+/*官方codeblock标签插件适配（https://hexo.io/zh-cn/docs/tag-plugins）*/
+.post-md .highlight, .post-md pre {
+  padding: 12px 20px;
+}
+.post-md .highlight figcaption {
+  padding-right: 40px !important;
 }
