@@ -197,7 +197,23 @@
                   <%= thisPost.categories.data[0].name %> 
                 </a> | 
               <% } %>
-                <a class="archive-title" href="<%- url_for(thisPost.path) %>"><%= thisPost.title %></a>
+                <% 
+                  let desc = thisPost.description || '';
+                  desc = desc.trim().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                %>
+                <% if (desc) { %>
+                <a 
+                  class="archive-title archive-tooltip" 
+                  href="<%- url_for(thisPost.path) %>"
+                  data-tooltip="<%= desc %>"
+                >
+                  <%= thisPost.title %>
+                </a>
+                <% } else { %>
+                <a class="archive-title" href="<%- url_for(thisPost.path) %>">
+                  <%= thisPost.title %>
+                </a>
+                <% } %>
             </div>
           </li>
         <% } %>

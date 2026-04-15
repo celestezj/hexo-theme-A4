@@ -75,7 +75,23 @@
         <li>
           <span class="archive-date"><%= date(array[i].date, "YYYY/MM/DD") %></span>
           <div class="archive-main">
-              <a class="archive-title" href="<%- url_for(array[i].path) %>"><%= array[i].title %></a>
+              <% 
+                let desc = array[i].description || '';
+                desc = desc.trim().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+              %>
+              <% if (desc) { %>
+              <a 
+                class="archive-title archive-tooltip" 
+                href="<%- url_for(array[i].path) %>"
+                data-tooltip="<%= desc %>"
+              >
+                <%= array[i].title %>
+              </a>
+              <% } else { %>
+              <a class="archive-title" href="<%- url_for(array[i].path) %>">
+                <%= array[i].title %>
+              </a>
+              <% } %>
           </div>
         </li>
     <% } %>

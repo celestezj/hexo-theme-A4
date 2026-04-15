@@ -411,3 +411,38 @@ span[alt='wavy'] {
 .post-md .highlight figcaption {
   padding-right: 40px !important;
 }
+/* 归档页文章标题增加悬浮提示（用于显示文章summary） */
+.archive-tooltip {
+  position: relative !important;
+  cursor: help !important;
+}
+/* 提示气泡 */
+.archive-tooltip:hover::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #b73231;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: pre-wrap;
+  min-width: 220px;
+  max-width: 380px;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  line-height: 1.5;
+}
+/* 气泡小箭头 */
+.archive-tooltip:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 115%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: #b73231;
+  z-index: 9999;
+}
