@@ -355,8 +355,8 @@ span[alt='wavy'] {
   position: relative;
   top: -1px;
   margin-top: -1px;
-  padding-bottom: calc(0.5rem + 2px); /* 加高底部内边距 */
-  margin-bottom: -2px; /* 👇 关键：把按钮往下拉长 2px，盖住下方缝隙 */
+  padding-bottom: calc(0.5rem + 6px); /* 加高底部内边距 */
+  margin-bottom: -6px; /* 👇 关键：把按钮往下拉长 2px，盖住下方缝隙，改成6px ipad浏览器才盖住 */
 }
 .paper .tabs > .nav-tabs > .tab:not(.active) button:hover {
   /*border-top: 2px solid #888;*/
