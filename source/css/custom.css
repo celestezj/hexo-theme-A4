@@ -446,3 +446,7 @@ span[alt='wavy'] {
   border-top-color: #b73231;
   z-index: 9999;
 }
+/*文章段落两端对齐*/
+.post-md p {
+  text-align: justify; /* 核心：两端对齐 */
+}
