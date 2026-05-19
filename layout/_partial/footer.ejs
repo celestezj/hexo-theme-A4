@@ -206,3 +206,68 @@ document.addEventListener('DOMContentLoaded', function () {
 <% if(theme.postInfo.viewCount) { %>
     <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> 
 <% } %>
+
+<!-- 搜索弹窗 -->
+<div id="lcl-search-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;">
+  <div style="max-width:530px;margin:100px auto;padding:20px;background:#fff;border-radius:8px;">
+    <input type="text" id="lcl-search-input" placeholder="输入关键词搜索文章..." style="width:100%;padding:5px;font-size:14px;">
+    <div id="lcl-search-results" style="margin-top:14px;max-height:400px;overflow-y:auto;overflow-x:hidden;display:block !important;opacity:1 !important;"></div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  let searchData = [];
+  fetch('/search-min.json')
+    .then(res => res.json())
+    .then(data => { searchData = data; });
+
+  const modal = document.getElementById('lcl-search-modal');
+  const input = document.getElementById('lcl-search-input');
+  const results = document.getElementById('lcl-search-results');
+
+  // Ctrl + F 弹出搜索框
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'f') {
+      e.preventDefault(); // 禁用浏览器默认查找
+      modal.style.display = 'block';
+      input.placeholder = "输入关键词搜索文章...";
+      input.value = ''; //清空上一次搜索状态
+      results.innerHTML = '';
+      input.focus();
+    }
+    // ESC 关闭
+    if (e.key === 'Escape') {
+      modal.style.display = 'none';
+    }
+  });
+
+  // 点击空白关闭
+  modal.onclick = (e) => {
+    if (e.target === modal) modal.style.display = 'none';
+  };
+
+  // 搜索逻辑
+  input.oninput = function(e) {
+    const q = e.target.value.trim().toLowerCase();
+    results.innerHTML = '';
+    if (!q) return;
+
+    let html = '';
+    searchData.forEach(post => {
+      const title = (post.title || '').toLowerCase();
+      const content = (post.content || '').toLowerCase();
+      if (title.includes(q) || content.includes(q)) {
+        html += `
+        <div style="padding:4px 0;border-bottom:1px solid #f0f0f0;">
+          <a href="${post.url}" style="font-weight:bold;font-size:16px;color:#0066cc;">${post.title}</a>
+          <p style="margin:6px 0 0;color:#666;font-size:14px;line-height:1.5;">${(post.content||'').substring(0,110)}...</p>
+        </div>`;
+      }
+    });
+
+    if (!html) html = '<p style="color:#999;padding:20px 0;text-align:center;">未找到结果</p>';
+    results.innerHTML = html;
+  };
+});
+</script>
