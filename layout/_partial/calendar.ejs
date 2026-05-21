@@ -29,8 +29,13 @@
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script type="text/javascript">
-    if (window.innerWidth > 420) {
-    let myChart = echarts.init(document.getElementById('post-calendar'));
+let myCalendarChart = null;
+function initPostCalendar() {
+  if (myCalendarChart) {
+        myCalendarChart.dispose();
+  }
+  if (window.innerWidth > 420) {
+    myCalendarChart = echarts.init(document.getElementById('post-calendar'));
 
     <%
     // calculate range.
@@ -139,6 +144,18 @@
 
     };
 
-    myChart.setOption(option);
-    }
+    myCalendarChart.setOption(option);
+  }
+}
+// 首次初始化
+initPostCalendar();
+
+// 窗口缩放防抖重绘
+let resizeTimer = null;
+window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+        myCalendarChart ? myCalendarChart.resize() : initPostCalendar();
+    }, 150);
+});
 </script>
