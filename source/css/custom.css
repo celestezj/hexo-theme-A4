@@ -450,3 +450,16 @@ span[alt='wavy'] {
 .post-md p {
   text-align: justify; /* 核心：两端对齐 */
 }
+/*文章编辑pencil图标*/
+.post-edit-link:hover i {
+  color: #333 !important; /* 悬浮变深 */
+}
+/*控制部分内容在手机端的显示，当前认为屏幕宽度小于420px时为手机端*/
+.onlydisplayonphone{
+    display:none !important;
+}
+@media only screen and (max-width: 420px){
+    .onlydisplayonphone{
+        display: inline-block !important; /*inline*/
+    }
+}

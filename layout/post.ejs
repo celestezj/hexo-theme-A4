@@ -2,14 +2,26 @@
     <% var titlePosition = "left" %>
 
     <% if(is_post()) { %>
+        <% 
+            const githubEditUrl = "https://github.com/celestezj/blog-delta/edit/master/source/" + page.source;
+        %>
+
         <% if(page.hasOwnProperty('titlePosition') && (page.titlePosition == 'left' || page.titlePosition == 'center')) { %>
             <% if(page.titlePosition == 'left') {  %>
                 <div class="post-main-title">
                     <%= page.title %>
+                    <!-- 铅笔编辑图标 -->
+                    <a class="post-edit-link" href="<%= githubEditUrl %>" rel="external nofollow noreferrer" title="编辑" target="_blank">
+                        <i class="fas fa-pencil-alt" style="font-size: 20px; margin-left: 0px; color:#999;"></i>
+                    </a>
                 </div>
             <% } else {  titlePosition = "center" %>
                 <div class="post-main-title" style="text-align: center;">
                     <%= page.title %>
+                    <!-- 铅笔编辑图标 -->
+                    <a class="post-edit-link" href="<%= githubEditUrl %>" rel="external nofollow noreferrer" title="编辑" target="_blank">
+                        <i class="fas fa-pencil-alt" style="font-size: 20px; margin-left: 0px; color:#999;"></i>
+                    </a>
                 </div>
             <% } %>
 
@@ -17,10 +29,18 @@
             <% if(theme.post.titlePosition == 'left') {  %>
                 <div class="post-main-title">
                     <%= page.title %>
+                    <!-- 铅笔编辑图标 -->
+                    <a class="post-edit-link" href="<%= githubEditUrl %>" rel="external nofollow noreferrer" title="编辑" target="_blank">
+                        <i class="fas fa-pencil-alt" style="font-size: 20px; margin-left: 0px; color:#999;"></i>
+                    </a>
                 </div>
             <% } else { titlePosition = "center" %>
                 <div class="post-main-title" style="text-align: center;">
                     <%= page.title %>
+                    <!-- 铅笔编辑图标 -->
+                    <a class="post-edit-link" href="<%= githubEditUrl %>" rel="external nofollow noreferrer" title="编辑" target="_blank">
+                        <i class="fas fa-pencil-alt" style="font-size: 20px; margin-left: 0px; color:#999;"></i>
+                    </a>
                 </div>
             <% } %>
         <% } %>
