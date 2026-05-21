@@ -91,5 +91,6 @@
     <% } %>
 
     <!-- <link rel="stylesheet" href="https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Regular/result.css" /> -->
-    <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' />
+    <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' media="defer" onload="this.media='all'" />
+    <link rel='stylesheet' href='<%- cdn_lib_url("fontawesome") %>' media="defer" onload="this.media='all'" />
 </head>

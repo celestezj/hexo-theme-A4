@@ -3,11 +3,9 @@
  * transplant from hexo-theme-next
  * modify by Jerry
  * 摘自：https://github.com/celestezj/Butterfly_3.7.0/blob/master/themes/butterfly/scripts/tag/tabs.js
- * 但是做了阉割，因为A4主题不支持font-awesome图标，当前注释掉了tabs标签页右下角的向上箭头(tab-to-top)，另外
- * tabs标签页标题butterfly主题中支持添加icon图标，此处虽然没有阉割，但实际加了也不支持显示
  * ```markdown
  * {% tabs unique_name, [active_index] %}
- * <!-- tab [tab_caption] -->
+ * <!-- tab [tab_caption] [fontawesome-icon] -->
  * Any content (support inline tags too).
  * <!-- endtab -->
  * {% endtabs %}
@@ -57,7 +55,7 @@ function postTabs (args, content) {
     const icon = tabIcon.trim()
     tabIcon.length > 0 && (tabIcon = `<i class="${icon}"${isOnlyicon}></i>`)
 
-    const toTop = '';'<button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button>'
+    const toTop = '<button type="button" class="tab-to-top" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button>'
 
     const isActive = (tabActive > 0 && tabActive === tabId) || (tabActive === 0 && tabId === 1) ? ' active' : ''
     tabNav += `<li class="tab${isActive}"><button type="button" data-href="#${tabHref}">${tabIcon + tabCaption.trim()}</button></li>`

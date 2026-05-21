@@ -377,7 +377,7 @@ span[alt='wavy'] {
   display: block;
   animation: tabshow .5s;
 }
-/*.paper .tabs .tab-to-top {
+.paper .tabs .tab-to-top {
   position: relative;
   display: block;
   margin: 0 0 0 auto;
@@ -389,7 +389,7 @@ span[alt='wavy'] {
   padding: 4px 8px !important;
   border-radius: 4px !important;
   outline: none !important;
-}*/
+}
 @keyframes tabshow {
   0% {
     transform: translateY(2px);
