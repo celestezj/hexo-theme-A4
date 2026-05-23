@@ -463,3 +463,82 @@ span[alt='wavy'] {
         display: inline-block !important; /*inline*/
     }
 }
+/* GitHub 风格 Callout 提示框 */
+.paper .callout {
+  margin: 1rem 0;
+  padding: 0.3rem 0.8rem;
+  border-left: 3px solid #ccc;
+  /*border-radius: 6px;*/
+  /*background-color: #f6f8fa;*/
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.paper .callout-icon {
+  font-size: 1.1rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+.paper .callout-content {
+  flex: 1;
+  line-height: 1.6;
+}
+.paper .callout-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  /*font-weight: 600;*/
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 不同类型提示框的颜色配置 */
+.paper .callout-note {
+  border-left-color: #0969da;
+  /*background-color: #e6f4ff;*/
+}
+.paper .callout-note .callout-title {
+  color: #0969da;
+}
+.paper .callout-note .callout-icon {
+  color: #0969da;
+}
+.paper .callout-tip {
+  border-left-color: #1a7f37;
+  /*background-color: #e6f9e6;*/
+}
+.paper .callout-tip .callout-title {
+  color: #1a7f37;
+}
+.paper .callout-tip .callout-icon {
+  color: #1a7f37;
+}
+.paper .callout-important {
+  border-left-color: #8250df;
+  /*background-color: #ece6ff;*/
+}
+.paper .callout-important .callout-title {
+  color: #8250df;
+}
+.paper .callout-important .callout-icon {
+  color: #8250df;
+}
+.paper .callout-warning {
+  border-left-color: #9a6700;
+  /*background-color: #fff8c5;*/
+}
+.paper .callout-warning .callout-title {
+  color: #9a6700;
+}
+.paper .callout-warning .callout-icon {
+  color: #9a6700;
+}
+.paper .callout-danger {
+  border-left-color: #cf222e;
+  /*background-color: #ffebe9;*/
+}
+.paper .callout-danger .callout-title {
+  color: #cf222e;
+}
+.paper .callout-danger .callout-icon {
+  color: #cf222e;
+}
