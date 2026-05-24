@@ -5,6 +5,8 @@
  * {% details 标题 %}
  * 内容（支持markdown）
  * {% enddetails %}
+ * 
+ * 另外可以参考：https://github.com/AimTao/hexo-fold
  */
 
 'use strict';

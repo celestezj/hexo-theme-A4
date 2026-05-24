@@ -1,5 +1,7 @@
 const cheerio = require('cheerio');
 
+/* github风格blockquotes提示框 */
+
 hexo.extend.filter.register('after_post_render', function(data) {
   const $ = cheerio.load(data.content, { decodeEntities: false });
 
