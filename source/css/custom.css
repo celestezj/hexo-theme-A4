@@ -52,7 +52,7 @@ img[data-original] {
   height: auto !important;
   /* 👇 把这行注释掉 或 删除！之前某些图片设置为行内样式的，但是loading占位图却是block块级元素，会导致严重的布局抖动！原因就在此*/
   /* display: block !important; */
-  margin: 20px auto !important;
+  /*margin: 20px auto !important;*/
   object-fit: none !important;
 }
 /*懒加载失败的占位图，不允许被修改原有尺寸*/
@@ -366,7 +366,7 @@ span[alt='wavy'] {
 .paper .tabs > .tab-contents .tab-item-content {
   position: relative;
   display: none;
-  padding: 1.8rem 1.2rem;
+  padding: 1.2rem 1.2rem;
   background: #ffffff;
 }
 @media (max-width: 768px) {
