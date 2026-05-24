@@ -50,7 +50,8 @@ img[data-original] {
   max-height: 48px !important;
   width: auto !important;
   height: auto !important;
-  display: block !important;
+  /* 👇 把这行注释掉 或 删除！之前某些图片设置为行内样式的，但是loading占位图却是block块级元素，会导致严重的布局抖动！原因就在此*/
+  /* display: block !important; */
   margin: 20px auto !important;
   object-fit: none !important;
 }
