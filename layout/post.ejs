@@ -94,6 +94,7 @@
         <%- page.content %>
     </div>
 
+    <% if(is_post()) { %>
     <div class="post-meta">
         <i>
         <% if(is_post()) { %>
@@ -124,6 +125,7 @@
         <% } %>
         </i>
     </div>
+    <% } %>
     <br>
     
     <% if(theme.postInfo.prevAndNextLink.status == true) { %>
