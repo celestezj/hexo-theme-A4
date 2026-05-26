@@ -70,12 +70,14 @@
                     <span>阅读估时：<%= min2read(page.content) %>分钟</span>
                 <% } %>
                 <% if(theme.postInfo.viewCount) { %>
-                    <% if(theme.postInfo.wordCount || theme.postInfo.updateDate|| theme.postInfo.readTime) {  %>
-                        &nbsp; | &nbsp;
+                    <% if (!theme.no_internet_local_deploy) { %>
+                        <% if(theme.postInfo.wordCount || theme.postInfo.updateDate|| theme.postInfo.readTime) {  %>
+                            &nbsp; | &nbsp;
+                        <% } %>
+                        <span id="busuanzi_container_page_pv">
+                            阅读量：<span id="busuanzi_value_page_pv"></span>次
+                        </span>
                     <% } %>
-                    <span id="busuanzi_container_page_pv">
-                        阅读量：<span id="busuanzi_value_page_pv"></span>次
-                    </span>
                 <% } %>
             </div>
     <% } %>

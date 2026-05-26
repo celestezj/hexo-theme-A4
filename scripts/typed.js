@@ -8,6 +8,9 @@
 'use strict'
 
 function typed (args, content) {
+  // 先获取主题配置：判断是否无网络本地部署
+  const noInternet = hexo.theme.config.no_internet_local_deploy || false
+
   args = args.join(' ').split(',')
   let id = args[0].trim()
   let loop = args[1].trim()
@@ -18,11 +21,15 @@ function typed (args, content) {
   let backdelay = (prop.length >= 4) ? prop[3].trim() : 2000
   let text = JSON.stringify(content.split("\n"))
   
+  const jsSrc = noInternet 
+    ? '/js/typed.min.js'                  // 本地模式
+    : 'https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js' // 在线模式
+
   return `<span class="${id}"></span>
   <script>
 	  if (typeof(Typed) === 'undefined') {
 	  	  var typed_script = document.createElement("script");
-		  typed_script.src = "https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js";
+		  typed_script.src = "${jsSrc}";
 		  document.getElementsByTagName('body')[0].appendChild(typed_script);
 	  }
       var checkTypedExistCount = 0;

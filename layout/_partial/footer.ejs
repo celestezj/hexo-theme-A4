@@ -1,7 +1,7 @@
 <div class="footer">
     <% if(path != 'index.html') { %>
         <span> 
-            <%= theme.footerLink.info %> 
+            <%= theme.footerLink.info.replace(/\{%\s*current_year\s*%}/g, new Date().getFullYear()) %> 
 
             <% for (name in theme.footerLink) { %>
                 <% if(name != 'info') { %>
@@ -19,16 +19,20 @@
         <% if(theme.indexInfo.allWordCount) { %>
         <span>本站总字数：<%= totalcount(site) %></span>
         <% } %>
-        <% if(theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>
-            <div class="footer-last-span-right">
-        <% } else if(!theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>
-            <div>
-        <% } %>
-        <% if(theme.indexInfo.allViewCount) { %>
-                <span id="busuanzi_container_site_pv" class="">
-                    本站总访问：<span id="busuanzi_value_site_pv"></span>次
-                </span>
-            </div>
+        <% if (!theme.no_internet_local_deploy) { %>
+          <% if(theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>
+              <div class="footer-last-span-right">
+          <% } else if(!theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>
+              <div>
+          <% } %>
+          <% if(theme.indexInfo.allViewCount) { %>
+                  <span id="busuanzi_container_site_pv" class="">
+                      本站总访问：<span id="busuanzi_value_site_pv"></span>次
+                  </span>
+              </div>
+          <% } %>
+        <% } else { %>
+          <div class="footer-last-span-right"></div>
         <% } %>
     </div>
 <% } %>
@@ -145,7 +149,11 @@ var optionalJsFiles = {
 <% } %>
 
 <% if (config.mermaid && config.mermaid.enable && is_post()) { %>
-<script src="https://unpkg.com/mermaid@<%= config.mermaid.version %>/dist/mermaid.min.js"></script>
+<% if (theme.no_internet_local_deploy) { %>
+  <script src="/js/mermaid.min.js"></script> <!--script src="<%= cdn_theme_url('js/mermaid.min.js') %>"></script-->
+<% } else { %>
+  <script src="https://unpkg.com/mermaid@<%= config.mermaid.version %>/dist/mermaid.min.js"></script>
+<% } %>
 <script>
 if (window.mermaid) {
   mermaid.initialize(<%= JSON.stringify(config.mermaid.options || {}) %>);
@@ -203,8 +211,10 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 </script>
 
-<% if(theme.postInfo.viewCount) { %>
-    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> 
+<% if (!theme.no_internet_local_deploy) { %>
+  <% if(theme.postInfo.viewCount) { %>
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script> 
+  <% } %>
 <% } %>
 
 <!-- 搜索弹窗 -->

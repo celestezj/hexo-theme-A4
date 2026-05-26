@@ -121,6 +121,31 @@
     <% } %>
 
     <!-- <link rel="stylesheet" href="https://chinese-fonts-cdn.deno.dev/packages/lxgwwenkai/dist/LXGWWenKai-Regular/result.css" /> -->
-    <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' media="defer" onload="this.media='all'" />
+    <% if (theme.no_internet_local_deploy) { %><!--强制浏览器在解析 HTML 时就请求这个字体文件，不用等 result.css 解析，以解决字体渲染闪烁问题-->
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/9943a99f0ff7461d19c688683c356af7.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/fb6254bcef043b2646bef208903a085d.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/a5c2b3ca44ea9700ad97be7d32497fff.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/75767034076971022f202fe43ca5cba5.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/3ffbdd9f187d0e63b1e20d069088ab0f.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/46007c5ce8b6c79042b93dd31b9452ea.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/265b53b1a28be69e8cf2212083136997.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/f9873d3de0fc50483413c232f214b09a.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/c4ece0d5e072bf22e8d728d0981f23ce.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/3c45b943cfc80eb190dedd037b321451.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/718a87741cb9ee85ca82651d00e91098.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/ac319f5be7f7a687c0f877d067b16901.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/ece73461d5ece4182f49682193397ec6.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/777a9fdb3f97593f45731af5912974c4.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/84b70d4dd0a70437d28f39d8ba462402.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/152a29d184e7921344aa5bb4f8cb5d5b.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/86757a5cd454b1fad82479bc5500bf0e.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/b903b9a9af4894d5d5b16e4380f465ec.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/11181e810bd4c3f025767cb1b971e7ac.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/notoserifsc-medium-webfont.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel="preload" href="/fonts/unicons.woff2" as="font" type="font/woff2" crossorigin>
+        <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' />
+    <% } else { %>
+        <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' media="defer" onload="this.media='all'" />
+    <% } %>
     <link rel='stylesheet' href='<%- cdn_lib_url("fontawesome") %>' media="defer" onload="this.media='all'" />
 </head>

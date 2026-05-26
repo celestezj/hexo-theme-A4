@@ -54,6 +54,15 @@ function buildLibUrl(libName, themeConfig) {
     return null;
   }
 
+  // 核心：判断是否无网络本地部署
+  const noInternet = themeConfig.no_internet_local_deploy;
+  
+  // 如果开启本地模式 + 存在 local_url → 使用本地地址
+  if (noInternet && lib.local_url) {
+    return lib.local_url; //return hexo.extend.helper.get('url_for').call(hexo, lib.local_url);
+  }
+
+  // 否则正常返回线上 CDN 地址
   return lib.url;
 }
 
@@ -74,6 +83,9 @@ hexo.extend.helper.register('cdn_base', function() {
 });
 
 hexo.extend.helper.register('is_cdn_enabled', function() {
+  if (this.theme.no_internet_local_deploy) {
+    return false;
+  }
   return !!(this.theme.cdn?.enable && this.theme.cdn?.provider);
 });
 
@@ -93,6 +105,24 @@ hexo.extend.helper.register('get_list_from_config', function(data) {
   }
   return dataList.filter(item => item && item.trim() !== '');
 });
+
+hexo.extend.tag.register('iflocal', function (args, content) {
+  const local = hexo.theme.config.no_internet_local_deploy || false;
+  if (local) {
+    // 渲染 content 为 markdown
+    return hexo.render.renderSync({ text: content, engine: 'markdown' });
+  }
+  return '';
+}, { ends: true });
+
+hexo.extend.tag.register('ifonline', function (args, content) {
+  const local = hexo.theme.config.no_internet_local_deploy || false;
+  if (!local) {
+    // 渲染 content 为 markdown
+    return hexo.render.renderSync({ text: content, engine: 'markdown' });
+  }
+  return '';
+}, { ends: true });
 
 // 导出供其他脚本使用
 module.exports = {
