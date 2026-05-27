@@ -1,61 +1,46 @@
 $(document).ready(function() {
-    var headingCount1 = $("h1").length;
-    var headingCount2 = $("h2").length;
-    var headingCount3 = $("h3").length;
-    var headingCount4 = $("h4").length;
-    var headingCount5 = $("h5").length;
-    var headingCount6 = $("h6").length;
-    var headingCount7 = $("h7").length;
-    var tocHeading = "";
+  var headings = ["h1","h2","h3","h4","h5","h6"];
+  //var tocHeading = headings.filter(h => $(h).length > 1).join(",");
+  var tocHeading = headings.filter(h => $(h).length > 0).join(",");
 
-    if (headingCount1 > 1) {
-      if(tocHeading == "") {
-        tocHeading = "h1";
-      } else {
-        tocHeading += ",h1"
+  var $hs = $(tocHeading);
+
+  // ===============================
+  // 只临时删除【每个标题的最后一个 span】（H1/H2/H3/H4 后缀）
+  // ===============================
+  $hs.each(function() {
+    var $h = $(this);
+    // 找到当前标题内部 最后一个 span
+    var $lastSpan = $h.find("span").last();
+
+    if ($lastSpan.length) {
+      // 保存旧内容
+      $lastSpan.data("oldText", $lastSpan.text());
+      // 清空文字（不删标签，不影响图片）
+      $lastSpan.text("");
+    }
+  });
+
+  // 初始化 TOC
+  $("#toc").tocify({
+    selectors: tocHeading,
+    hashGenerator: function(text) {
+      return text.trim().replace(/\s+/g, "-");
+    }
+  });
+
+  // ===============================
+  // 恢复最后一个 span 的文字
+  // ===============================
+  $hs.each(function() {
+    var $h = $(this);
+    var $lastSpan = $h.find("span").last();
+
+    if ($lastSpan.length) {
+      var oldText = $lastSpan.data("oldText");
+      if (oldText) {
+        $lastSpan.text(oldText);
       }
     }
-
-    if (headingCount2 > 1) {
-        if(tocHeading == "") {
-          tocHeading = "h2";
-        } else {
-          tocHeading += ",h2"
-        }
-    }
-
-    if (headingCount3 > 1) {
-        if(tocHeading == "") {
-          tocHeading = "h3";
-        } else {
-          tocHeading += ",h3"
-        }
-    }
-
-    if (headingCount4 > 1) {
-        if(tocHeading == "") {
-          tocHeading = "h4";
-        } else {
-          tocHeading += ",h4"
-        }
-    }
-    if (headingCount5 > 1) {
-        if(tocHeading == "") {
-          tocHeading = "h5";
-        } else {
-          tocHeading += ",h5"
-        }
-    }
-
-    if (headingCount6 > 1) {
-        if(tocHeading == "") {
-          tocHeading = "h6";
-        } else {
-          tocHeading += ",h6"
-        }
-    }
-
-    $("#toc").tocify({
-        selectors: tocHeading
-      });
   });
+});
