@@ -7,4 +7,6 @@
             </div>
     <% break; }} %>
 </div>
-<%- include('_partial/calendar') %>
+<% if (theme.post_calendar) { %>
+  <%- include('_partial/calendar') %>
+<% } %>

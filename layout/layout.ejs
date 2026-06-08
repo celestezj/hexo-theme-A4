@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%# 挂载到locals，全模板共享，单请求生命周期唯一 %>
+<% if (!locals.loadedLibs) locals.loadedLibs = []; %>
 <html lang="<%= config.language || 'en' %>">
     <%- partial('_partial/configcss/font') %>
     <%- partial('_partial/head') %>
@@ -8,7 +10,10 @@
 
     <body>
         <% if(theme.tool.darkMode) { %>
-        <script src='<%- cdn_lib_url("darkreader") %>'></script><!--这个js会有跨域问题（不会造成功能问题，就是浏览器控制台会报错而已）-->
+        <% if (!locals.loadedLibs.includes("darkreader")) { %>
+            <script src='<%- cdn_lib_url("darkreader") %>'></script><!--这个js会有跨域问题（不会造成功能问题，就是浏览器控制台会报错而已）-->
+            <% locals.loadedLibs.push("darkreader"); %>
+        <% } %>
         <!--script>
             // 拦截 DarkReader 所有报错（PS：不需要这段代码了，豆包给了一个跨域修复的方案，就加一行代码：DarkReader.setFetchMethod(window.fetch);）
             const originalError = console.error;
@@ -102,14 +107,73 @@
             });
         </script>
         <% } %>
-        <% if(theme.tool.leftToc) { %>
-            <% if(is_post() && (!('leftToc' in page) || page.leftToc == true)) { %>
-                <div class="left-toc-container">
-                    <nav id="toc" class="bs-docs-sidebar"></nav>
-                </div>
+
+        <!-- Pjax 配置 -->
+        <% if (theme.enable_pjax) { %>
+        <script>
+            $(document).pjax('a[href]:not([href^="#"]):not([href^="javascript:"]):not([target="_blank"])', {
+                container: '#paper-content',
+                fragment: '#paper-content',
+                timeout: 8000,
+                cacheBust: false,
+                type: 'GET',
+                dataType: 'html'
+            }).on('pjax:start', function() {
+                // Pjax 开始加载前
+                // window.scrollTo(0, 0);
+            }).on('pjax:end', function() { //之前写的pjax:complete，但是return to last（即window.history.back()）后只会触发pjax:end，而不会触发pjax:complete，导致一些reinit动作无法被执行到，因此更换为pjax:end
+                // Pjax 加载完成后
+                window.scrollTo(0, 0);
+                // 重新初始化动态内容
+                initDynamicContent();
+            });
+        </script>
+        <% } %>
+
+        <% if (theme.post_calendar) { %>
+        <% if (theme.enable_pjax) { %>
+            <% if (!locals.loadedLibs.includes('echarts')) { %>
+                <script src="<%= cdn_lib_url('echarts') %>"></script>
+                <% locals.loadedLibs.push('echarts'); %>
+            <% } %>
+        <% } else { %>
+            <% if (is_home()) { %>
+                <% if (!locals.loadedLibs.includes('echarts')) { %>
+                    <script src="<%= cdn_lib_url('echarts') %>"></script>
+                    <% locals.loadedLibs.push('echarts'); %>
+                <% } %>
             <% } %>
         <% } %>
-        <div class="paper">
+        <% } %>
+
+        <% if (theme.comment.enable && !theme.no_internet_local_deploy) { %>
+          <% if (theme.comment.use === 'waline') { %>
+            <% if (theme.enable_pjax) { %>
+                <script src="<%= theme.waline_js %>"></script>
+            <% } else { %>
+                <% if ((is_post() || is_page()) && ( page.hasOwnProperty('comment') ? !!page.comment : (!!theme.comment.waline.serverUrl && !!theme.comment.waline.lang) )) { %>
+                    <!-- 正确、稳定、永远不报错的 Waline UMD 版本. 注意(is_post() || is_page())的条件是为了排除is_home() -->
+                    <script src="<%= theme.waline_js %>"></script>
+                <% } %>
+            <% } %>
+          <% } %>
+        <% } %>
+        
+        <% if (theme.typed_printer) { %>
+            <% if (!locals.loadedLibs.includes('typed-printer')) { %>
+                <script src="<%= cdn_lib_url('typed-printer') %>"></script>
+                <% locals.loadedLibs.push('typed-printer'); %>
+            <% } %>
+        <% } %>
+
+        <div class="paper" id="paper-content">
+            <% if(theme.tool.leftToc) { %>
+                <% if(is_post() && (!('leftToc' in page) || page.leftToc == true)) { %>
+                    <div class="left-toc-container">
+                        <nav id="toc" class="bs-docs-sidebar"></nav>
+                    </div>
+                <% } %>
+            <% } %>
 
             <% var tags,tagsInside, categories, categoriesInside; %>
 
@@ -183,6 +247,398 @@
                 </div>
             <% } %>
     </body>
+
+<%
+// 获取CDN开关配置
+var cdnEnabled = is_cdn_enabled();
+
+// 定义JS文件列表
+var baseJsFiles = get_list_from_config(theme.resources.theme.footer_js);
+
+// 可选JS文件映射
+var optionalJsFiles = {
+    returnToTop: {
+        check: theme.tool.returnToTop,
+        libs: ['jquery'], // 依赖的第三方库
+        paths: ['js/returnToTop.js']
+    },
+    returnToLast: {
+        check: theme.tool.returnToLast,
+        libs: [],
+        paths: ['js/returnToLastPage.js']
+    },
+    leftToc: {
+        check: theme.enable_pjax ? theme.tool.leftToc :
+            is_post() && (!('leftToc' in page) || page.leftToc == true) && theme.tool.leftToc,
+        libs: ['jquery', 'jquery-ui'],
+        paths: ['js/toc.js']
+    }
+};
+%>
+
+<% if (!locals.loadedLibs.includes("jquery")) { %>
+  <%- js(cdn_lib_url("jquery")) %>
+  <% locals.loadedLibs.push("jquery"); %>
+<% } %>
+
+<%# 加载主题基础JS文件 %>
+<% if (cdnEnabled) { %>
+    <% baseJsFiles.forEach(function(file) { %>
+        <%- js(cdn_theme_url(file)) %>
+    <% }); %>
+<% } else { %>
+    <% baseJsFiles.forEach(function(file) { %>
+        <%- js(file) %>
+    <% }); %>
+<% } %>
+
+<%# 加载可选JS文件 %>
+<% Object.keys(optionalJsFiles).forEach(function(key) { %>
+    <% var item = optionalJsFiles[key]; %>
+    <% if (item.check) { %>
+        <% item.libs.forEach(function(name) { %>
+            <% if (!locals.loadedLibs.includes(name)) { %>
+              <%- js(cdn_lib_url(name)) %>
+              <% locals.loadedLibs.push(name); %>
+            <% } %>
+        <% }); %>
+        <% item.paths.forEach(function(path) { %>
+            <% if (cdnEnabled) { %>
+                <%- js(cdn_theme_url(path)) %>
+            <% } else { %>
+                <%- js(path) %>
+            <% } %>
+        <% }); %>
+    <% } %>
+<% }); %>
+
+    <% if (config.mermaid && config.mermaid.enable) { %>
+        <% if (theme.no_internet_local_deploy) { %>
+            <script src="/js/mermaid.min.js"></script> <!--script src="<%= cdn_theme_url('js/mermaid.min.js') %>"></script-->
+        <% } else { %>
+            <script src="https://unpkg.com/mermaid@<%= config.mermaid.version %>/dist/mermaid.min.js"></script>
+        <% } %>
+        <script>
+            if (window.mermaid) {
+                console.log('init mermaid');
+                window.mermaid.initialize(<%= JSON.stringify(config.mermaid.options || {}) %>);
+            }
+        </script>
+    <% } %>
+
+    <%# Tab 标签页语法js支持 %>
+    <script>
+        const tabsFn = {
+        clickFnOfTabs: function () {
+        // 先清空所有旧事件（克隆节点 = 移除所有监听）
+        document.querySelectorAll('.paper .tab > button').forEach(item => {
+            const newBtn = item.cloneNode(true);
+            item.parentNode.replaceChild(newBtn, item);
+        });
+
+        // 重新绑定新事件
+        document.querySelectorAll('.paper .tab > button').forEach(function (item) {
+            item.addEventListener('click', function (e) {
+            const $this = this;
+            const $tabItem = $this.parentNode;
+
+            if (!$tabItem.classList.contains('active')) {
+                const $tabContent = $tabItem.parentNode.nextElementSibling;
+                const $siblings = Array.from($tabItem.parentNode.children).filter(el => el.classList.contains('active'));
+                if ($siblings.length > 0) {
+                $siblings[0].classList.remove('active');
+                }
+                $tabItem.classList.add('active');
+                const tabId = $this.getAttribute('data-href').replace('#', '');
+                const childList = Array.from($tabContent.children);
+                childList.forEach(item => {
+                if (item.id === tabId) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+                });
+            }
+            });
+        });
+        },
+
+        backToTop: () => {
+            // 先把旧的事件全部清空（关键！）
+            document.querySelectorAll('.paper .tabs .tab-to-top').forEach(item => {
+                // 先移除旧事件（克隆节点 = 清空所有监听）
+                const newItem = item.cloneNode(true);
+                item.parentNode.replaceChild(newItem, item);
+            });
+
+            // 再重新绑定新事件
+            document.querySelectorAll('.paper .tabs .tab-to-top').forEach(item => {
+                item.addEventListener('click', function () {
+                const tabsElement = this.closest('.tabs');
+                const topPosition = tabsElement.getBoundingClientRect().top + window.scrollY;
+                window.scrollTo({
+                    top: topPosition,
+                    behavior: 'smooth'
+                });
+                });
+            });
+        }
+        }
+
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("init tabs");
+            tabsFn.clickFnOfTabs()
+            tabsFn.backToTop()
+        })
+    </script>
+
+    <%# 不蒜子统计 %>
+    <% if (!theme.no_internet_local_deploy && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
+        <script id="busuanzi-script" async src="<%= theme.busuanzi_js %>"></script>
+    <% } %>
+
+    <!-- 搜索弹窗（全局只初始化一次，Pjax 永远有效，无需重复初始化） -->
+    <div id="lcl-search-modal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:9999;">
+    <div style="max-width:530px;margin:100px auto;padding:20px;background:#fff;border-radius:8px;">
+        <input type="text" id="lcl-search-input" placeholder="输入关键词搜索文章..." style="width:100%;padding:5px;font-size:14px;">
+        <div id="lcl-search-results" style="margin-top:14px;max-height:400px;overflow-y:auto;overflow-x:hidden;display:block !important;opacity:1 !important;"></div>
+    </div>
+    </div>
+    <script>
+        window.searchData = [];
+        window.searchInited = false;
+
+        function initSearch() {
+            if (window.searchInited) return;
+            window.searchInited = true;
+            console.log("init search");
+            fetch('/search-min.json')
+                .then(res => res.json())
+                .then(data => { window.searchData = data; });
+
+            const modal = document.getElementById('lcl-search-modal');
+            const input = document.getElementById('lcl-search-input');
+            const results = document.getElementById('lcl-search-results');
+
+            // 全局 Ctrl+F
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'f') {
+                e.preventDefault();
+                if (modal) {
+                    modal.style.display = 'block';
+                    input.value = '';
+                    results.innerHTML = '';
+                    input.placeholder = "输入关键词搜索文章...";
+                    input?.focus();
+                }
+                }
+                if (e.key === 'Escape') {
+                if (modal) {modal.style.display = 'none';}
+                }
+            });
+
+            modal?.addEventListener('click', (e) => {
+                if (e.target === modal) {modal.style.display = 'none';}
+            });
+
+            input?.addEventListener('input', function(e) {
+                const q = e.target.value.trim().toLowerCase();
+                results.innerHTML = '';
+                if (!q || !window.searchData.length) return;
+
+                let html = '';
+                window.searchData.forEach(post => {
+                const title = (post.title || '').toLowerCase();
+                const content = (post.content || '').toLowerCase();
+                if (title.includes(q) || content.includes(q)) {
+                    html += `
+                    <div style="padding:4px 0;border-bottom:1px solid #f0f0f0;">
+                    <a href="${post.url}" style="font-weight:bold;font-size:16px;color:#0066cc;">${post.title}</a>
+                    <p style="margin:6px 0;color:#666;font-size:14px;line-height:1.5;">${(post.content||'').substring(0,110)}...</p>
+                    </div>`;
+                }
+                });
+                results.innerHTML = html || '<p style="color:#999;text-align:center;padding:20px;">未找到结果</p>';
+            });
+        }
+
+        // 页面首次加载就初始化
+        document.addEventListener('DOMContentLoaded', initSearch);
+    </script>
+
+<% if (theme.enable_pjax) { %>
+    <script>
+    // Pjax 动态内容重新初始化函数
+    function initDynamicContent() {
+        console.log("auto call pjax:complete callback start...");
+        // 1. 重新初始化 Tab 组件
+        if (typeof tabsFn !== 'undefined' && tabsFn.clickFnOfTabs) {
+            console.log("reinit tabs");
+            tabsFn.clickFnOfTabs();
+        }
+        if (typeof tabsFn !== 'undefined' && tabsFn.backToTop) {
+            tabsFn.backToTop();
+        }
+
+        // 2. 重新初始化 Mermaid
+        <% if (config.mermaid && config.mermaid.enable) { %>
+        if (window.mermaid) {
+            try {
+                console.log('reinit mermaid');
+                // 重置配置（仅设置一次，不重复初始化）
+                window.mermaid.initialize({
+                startOnLoad: false,
+                securityLevel: 'loose'
+                });
+                // 获取所有 mermaid 代码块
+                const mermaidDoms = document.querySelectorAll('pre.mermaid');
+                if (mermaidDoms.length !== 0) {
+                    // 统一渲染（兼容 v9+/v8）
+                    if (typeof mermaid.run === 'function') {
+                    window.mermaid.run({ querySelector: 'pre.mermaid', suppressErrors: true });
+                    } else {
+                    window.mermaid.init(undefined, mermaidDoms);
+                    }
+                }
+            } catch (e) {
+                console.warn('⚠️ Mermaid 渲染失败:', e);
+            }
+        }
+        <% } %>
+
+        // 3. pjax跳转后，自动关闭搜索框
+        const modal = document.getElementById('lcl-search-modal');
+        if (modal) modal.style.display = 'none';
+
+        // 4. 重新初始化代码块复制按钮（对code-copy.js代码进行了pjax适配）
+        // 先清空所有旧按钮（必须）
+        document.querySelectorAll('.code-copy-btn').forEach(btn => btn.remove());
+        document.querySelectorAll('figure.highlight').forEach(fig => {
+        let wrapper;
+        // 如果已有容器，直接使用，不重复创建
+        if (fig.parentNode.classList.contains('highlight-container')) {
+            wrapper = fig.parentNode;
+        }
+        // 没有容器，才创建新容器
+        else {
+            wrapper = document.createElement('div');
+            wrapper.className = 'highlight-container';
+            fig.parentNode.insertBefore(wrapper, fig);
+            wrapper.appendChild(fig);
+        }
+        // 无论如何，都创建新按钮（解决回退后退按钮消失）
+        const btn = document.createElement('button');
+        btn.className = 'code-copy-btn';
+        btn.textContent = 'copy';
+        wrapper.appendChild(btn);
+        // 每次都重新绑定事件（确保浏览器后退后也能点击）
+        btn.onclick = async () => {
+            try {
+            const codeEl = fig.querySelector('td.code pre');
+            const text = codeEl.innerHTML
+                .replace(/<br>/g, '\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/&amp;/g, '&')
+                .trim();
+            await navigator.clipboard.writeText(text);
+            btn.textContent = 'copied';
+            setTimeout(() => btn.textContent = 'copy', 1500);
+            } catch (e) {
+            console.warn('复制失败', e);
+            }
+        };
+        });
+
+        // 5. 重置返回顶部按钮
+        <% if (theme.tool.returnToTop) { %>
+            if (window.initReturnToTopJS) {
+                console.log("reinit return to top button");
+                window.initReturnToTopJS();
+            }
+        <% } %>
+        // 6. 重置返回上一页按钮
+        <% if (theme.tool.returnToLast) { %>
+            if (window.initReturnToLast) {
+                console.log("reinit return to last page button");
+                window.initReturnToLast();
+            }
+        <% } %>
+        // 7. 重置文章页面左侧leftTOC导航栏
+        <% if (theme.tool.leftToc) { %>
+            if (window.initLeftTOC) {
+                console.log("reinit left toc");
+                window.initLeftTOC();
+            }
+        <% } %>
+
+        // 8. 重置标题后缀层级标记（见title_badge.js）
+        if (window.addHeaderMark) {
+            console.log("reinit header mark");
+            window.addHeaderMark();
+        }
+        // 9. 重置文章页面顶部随机句子（见randomHeaderContent.js）
+        if (window.randomHeaderText) {
+            console.log("reinit post random header");
+            window.randomHeaderText();
+        }
+
+        //10. 图片懒加载重新扫描
+        <% if (config.lazyload && config.lazyload.enable) { %>
+            if (window.imageLazyLoadSetting) {
+                console.log("reinit img lazyload");
+                // 强制懒加载重新扫描新图片（isSPA: true：pjax跳转后滚动才会重新扫描图片列表并懒加载，但问题是：PJAX 跳转后不会自动触发滚动！所以你不手动滚动的话pjax新加载的图片永远不会触发懒加载，导致一直显示loading占位图）
+                window.imageLazyLoadSetting.processImages(true);
+            }
+        <% } %>
+
+        // 11. 重新加载不蒜子统计
+        <% if (!theme.no_internet_local_deploy && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
+        try {
+            console.log("reinit busuanzi");
+            const old = document.getElementById('busuanzi-script');
+            if (old) old.remove();
+            const script = document.createElement('script');
+            script.id = 'busuanzi-script';
+            script.src = '<%= theme.busuanzi_js %>'; //动态加载busuanzi.pure.mini.js会自动回填busuanzi_value_page_pv和busuanzi_value_site_pv
+            script.async = true;
+            document.body.appendChild(script);
+        } catch (e) {
+            console.warn('⚠️ Busuanzi 加载失败:', e);
+        }
+        <% } %>
+
+        // 12. 打字机实例重置（pjax跳转后如果又回到原页面，原页面中的打字机实例虽然会重置，但由于 PJAX 完成时 DOM 未稳定，立即初始化易导致实例叠加错乱，因此此处延迟 100ms 再统一初始化，可确保 DOM 渲染完成后安全重建实例，解决打字加速异常bug）
+        <% if (theme.typed_printer) { %>
+            setTimeout(() => {
+                // 自动执行所有 typed 打字机实例的重置动作
+                console.log("reinit typed printer");
+                for (const key in window) {
+                if (key.startsWith('initTyped_') && typeof window[key] === 'function') {
+                    try {
+                        window[key]();
+                    } catch (e) {
+                        console.warn('⚠️ Typed printer 重置失败:', e);
+                    }
+                }
+                }
+            }, 200); //这里100ms我改成了200ms
+        <% } %>
+
+        // 13. 首页文章日历重置
+        <% if (theme.post_calendar) { %>
+            if (typeof initPostCalendar === 'function') {
+                console.log("reinit post-calendar");
+                initPostCalendar();
+            }
+        <% } %>
+
+        console.log("pjax callback end");
+    }
+    </script>
+<% } %>
 </html>
 <% if (is_cdn_enabled()) { %>
     <%#- js(cdn_theme_url('js/emojiHandler.js')) %>

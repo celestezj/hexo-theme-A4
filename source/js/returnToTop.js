@@ -4,13 +4,17 @@
 
 
 
-(function($) { "use strict";
+(function(o) {
 
-	$(document).ready(function(){"use strict";
+	function initScrollProgress() {
+        // 先清除旧事件，防止重复绑定
+        o(window).off("scroll");
+        o(".progress-wrap").off("click");
 	
 		//Scroll back to top
 		
 		var progressPath = document.querySelector('.progress-wrap path');
+		if (!progressPath) return; // 不存在直接退出
 		var pathLength = progressPath.getTotalLength();
 		progressPath.style.transition = progressPath.style.WebkitTransition = 'none';
 		progressPath.style.strokeDasharray = pathLength + ' ' + pathLength;
@@ -44,9 +48,9 @@
 		})
 		
 		
-	});
+	}
 
-	$(document).ready(function() {
+	function initLightboxObserver() {
 		// 选择你想要观察的元素
 		var targetNode = document.querySelector('.lg-container');
 		if(targetNode == undefined || targetNode == null) return;
@@ -83,7 +87,19 @@
 	
 		// 开始观察目标节点
 		observer.observe(targetNode, config);
-	});
+	}
 	
+	function initReturnToTopJS() {
+        initScrollProgress();
+        initLightboxObserver();
+    }
+
+	//首次加载调用
+	o(document).ready(function() {
+		console.log("init return to top button");
+        initReturnToTopJS();
+    });
+	// 暴露到全局 window，外部就能调用了
+    window.initReturnToTopJS = initReturnToTopJS;
 	
-})(jQuery); 
+})(jQuery);

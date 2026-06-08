@@ -27,19 +27,16 @@
     }
 </style>
 
-<% if (!theme.no_internet_local_deploy) { %>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-<% } else { %>
-    <script src="/js/echarts.min.js"></script>
-<% } %>
 <script type="text/javascript">
-let myCalendarChart = null;
 function initPostCalendar() {
-  if (myCalendarChart) {
-        myCalendarChart.dispose();
+  if (window.myCalendarChart) {
+        window.myCalendarChart.dispose();
+        window.myCalendarChart = null;
   }
   if (window.innerWidth > 420) {
-    myCalendarChart = echarts.init(document.getElementById('post-calendar'));
+    if (!document.getElementById('post-calendar')) return;
+    window.myCalendarChart = echarts.init(document.getElementById('post-calendar'));
+    // console.log("auto init post-calendar");
 
     <%
     // calculate range.
@@ -148,18 +145,41 @@ function initPostCalendar() {
 
     };
 
-    myCalendarChart.setOption(option);
+    window.myCalendarChart.setOption(option);
   }
 }
-// 首次初始化
-initPostCalendar();
 
-// 窗口缩放防抖重绘
-let resizeTimer = null;
-window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-        myCalendarChart ? myCalendarChart.resize() : initPostCalendar();
-    }, 150);
-});
+//变量_calendarFirstInitialized控制包裹的代码在pjax环境下即使多次加载也只进去执行一次
+if (!window._calendarFirstInitialized) {
+  window._calendarFirstInitialized = true;
+  // 首次加载完成执行initPostCalendar()
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("init post-calendar");
+    initPostCalendar();
+  });
+  // 窗口缩放防抖重绘
+  // 先清除旧的监听（防止重复绑定）
+//   if (window._calendarResizeHandler) {
+//     window.removeEventListener('resize', window._calendarResizeHandler);
+//   }
+  /*window.*/_calendarResizeHandler = function () {
+    if (window.resizeCalendarTimer) {
+        clearTimeout(window.resizeCalendarTimer);
+        window.resizeCalendarTimer = null;
+    }
+    // 安全判断：容器不存在就不执行
+    if (document.getElementById('post-calendar')) {
+        window.resizeCalendarTimer = setTimeout(() => {
+            console.log("resize post-calendar");
+            if (window.myCalendarChart) {
+            window.myCalendarChart.resize();
+            } else {
+            initPostCalendar();
+            }
+        }, 150);
+    }
+  };
+  // 绑定新的
+  window.addEventListener('resize', /*window.*/_calendarResizeHandler);
+}
 </script>

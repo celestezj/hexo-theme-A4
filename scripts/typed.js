@@ -7,49 +7,66 @@
 
 'use strict'
 
-function typed (args, content) {
-  // 先获取主题配置：判断是否无网络本地部署
-  const noInternet = hexo.theme.config.no_internet_local_deploy || false
+function typed(args, content) {
+  // 🔥 正确获取 hexo 配置方式，永远不报错
+  const enableTyped = hexo.theme.config.typed_printer || false;
 
+  // 未启用 → 直接返回原文
+  if (!enableTyped) {
+    return content;
+  }
   args = args.join(' ').split(',')
-  let id = args[0].trim()
-  let loop = args[1].trim()
-  let prop = args[2] ? args[2].trim().split(' ') : ''
-  let typespeed = prop ? prop[0].trim() : 100
-  let backspeed = (prop.length >= 2) ? prop[1].trim() : 50
-  let startdelay = (prop.length >= 3) ? prop[2].trim() : 200
-  let backdelay = (prop.length >= 4) ? prop[3].trim() : 2000
-  let text = JSON.stringify(content.split("\n"))
-  
-  const jsSrc = noInternet 
-    ? '/js/typed.min.js'                  // 本地模式
-    : 'https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js' // 在线模式
+  let id = (args[0] || 'typed_default').trim()
+  let loop = (args[1] || 'true').trim()
+  let prop = args[2] ? args[2].trim().split(' ') : []
 
-  return `<span class="${id}"></span>
-  <script>
-	  if (typeof(Typed) === 'undefined') {
-	  	  var typed_script = document.createElement("script");
-		  typed_script.src = "${jsSrc}";
-		  document.getElementsByTagName('body')[0].appendChild(typed_script);
-	  }
-      var checkTypedExistCount = 0;
-      var checkTypedExist = setInterval(function() {
-        if (checkTypedExistCount > 16) {clearInterval(checkTypedExist);}
-        checkTypedExistCount += 1;
-		if(typeof(Typed) !== 'undefined') {
-          new Typed('.${id}', {
-            strings: ${text}, //输入内容, 支持html标签
-            typeSpeed: ${typespeed}, //打字速度
-            backSpeed: ${backspeed}, //回退速度
-            startDelay: ${startdelay}, //开始打字前的延迟
-            backDelay: ${backdelay}, //回退前的延迟
-            loop: ${loop} //循环
-          });
-          clearInterval(checkTypedExist);
-        }
-      }, 300);
-	  
-  </script>`
+  let typespeed = prop[0] ? parseInt(prop[0]) : 100
+  let backspeed = prop[1] ? parseInt(prop[1]) : 50
+  let startdelay = prop[2] ? parseInt(prop[2]) : 200
+  let backdelay = prop[3] ? parseInt(prop[3]) : 2000
+
+  let textLines = content.split("\n")
+    .map(s => s.trim())
+    .filter(Boolean)
+  let text = JSON.stringify(textLines)
+
+return `
+<span class="${id}"></span>
+<script>
+// 每个实例独立封装，支持多实例共存
+window.initTyped_${id} = function() {
+  const typedKey  = '__typed_${id}';
+  const selector  = '.${id}';
+
+  // 1. 销毁旧实例
+  if (window[typedKey]) {
+    try { window[typedKey].destroy(); } catch(e) {}
+    delete window[typedKey];
+  }
+
+  const $el = document.querySelector(selector);
+  if (!$el) return;
+
+  // 2. 🔥 只删除【当前元素后面】的光标（安全！不影响其他实例）
+  const nextEl = $el.nextElementSibling;
+  if (nextEl && nextEl.classList.contains('typed-cursor')) {
+    nextEl.remove();
+  }
+
+  // 3. 重新创建
+  window[typedKey] = new Typed($el, {
+    strings: ${text}, //输入内容, 支持html标签
+    typeSpeed: ${typespeed}, //打字速度
+    backSpeed: ${backspeed}, //回退速度
+    startDelay: ${startdelay}, //开始打字前的延迟
+    backDelay: ${backdelay}, //回退前的延迟
+    loop: ${loop} //循环
+  });
+};
+
+// 立即执行
+window.initTyped_${id}();
+</script>`
 }
 
-hexo.extend.tag.register('typed',typed,{ ends: true });
+hexo.extend.tag.register('typed', typed, { ends: true });

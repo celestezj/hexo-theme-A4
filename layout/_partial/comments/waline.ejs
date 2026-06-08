@@ -1,31 +1,36 @@
-<% if(page.hasOwnProperty('comment') ? page.comment
-    : theme.comment.waline.serverUrl
-    && theme.comment.waline.lang
-) { %>
+<% if(page.hasOwnProperty('comment') ? page.comment : theme.comment.waline.serverUrl && theme.comment.waline.lang) { %>
+<div id="waline"></div>
 
-    <div id="waline"></div>
-    <script type="module"  >
-        import { init } from 'https://npm.elemecdn.com/hexo-theme-a4@latest/source/js/waline.mjs';
-        function loadWaline() {
-            init({
-                el: '#waline',
-                serverURL: '<%= theme.comment.waline.serverUrl %>',
-                lang: '<%= theme.comment.waline.lang %>',
-                dark: 'body[class~="dark-mode"]',
-                requiredMeta: ['nick','mail'], // cannot customize by theme config, change it yourself
-                search: false, // 禁止表情包搜索
-                reaction: false, // 对文章打分
-                pageview: false, // 浏览量统计
-                comment: false, // 评论数统计
+<script>
+function runWalineComment() {
+  // 🔥 先判断元素是否存在，不存在直接退出，不报错
+  const container = document.getElementById('waline');
+  if (!container) return;
 
-                locale: {
-                    placeholder: '<%= theme.comment.waline.placeholder %>',
-                    sofa: ''
-                },
-            });
+  console.log("auto init waline comment");
+  // 防止重复初始化，清空容器
+  container.innerHTML = '';
 
-        }
-        window.addEventListener('DOMContentLoaded', loadWaline);
-    </script>
+  Waline.init({
+    el: "#waline",
+    serverURL: "<%= theme.comment.waline.serverUrl %>",
+    lang: "<%= theme.comment.waline.lang %>",
+    dark: 'body[class~="dark-mode"]',
+    requiredMeta: ["nick", "mail"], // cannot customize by theme config, change it yourself
+    search: false, // 禁止表情包搜索
+    reaction: false, // 对文章打分
+    pageview: false, // 浏览量统计
+    comment: false, // 评论数统计?
+    noRss: true, // 关闭订阅(RSS)区块，官方开关
+    locale: {
+      placeholder: "<%= theme.comment.waline.placeholder %>",
+      sofa: ""
+    }
+  });
+}
 
+runWalineComment();
+// PJAX 页面跳转（不需要，pjax获取的#paper-content中包含了本段script，就可以执行到runWalineComment()了，无需在pjax:complete回调中再次执行runWalineComment()）
+// document.addEventListener("pjax:complete", runWalineComment);
+</script>
 <% } %>

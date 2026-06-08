@@ -55,7 +55,10 @@
             path: theme.resources.theme.optional_css.lightgallery
         },
         waline: {
-            check: (is_post() || is_page()) && theme.comment.enable && (!page.hasOwnProperty('comment') || (page.hasOwnProperty('comment') && page.comment)),
+            check: theme.enable_pjax ?
+                theme.comment.enable && !theme.no_internet_local_deploy && (theme.comment.use === 'waline') :
+                (is_post() || is_page()) && theme.comment.enable && !theme.no_internet_local_deploy && 
+                (!page.hasOwnProperty('comment') || (page.hasOwnProperty('comment') && page.comment)) && (theme.comment.use === 'waline'),
             path: theme.resources.theme.optional_css.waline
         },
         returnToTop: {
@@ -63,7 +66,8 @@
             paths: get_list_from_config(theme.resources.theme.optional_css.returnToTop)
         },
         leftToc: {
-            check: is_post() && (!('leftToc' in page) || page.leftToc == true) && theme.tool.leftToc,
+            check: theme.enable_pjax ? theme.tool.leftToc :
+                is_post() && (!('leftToc' in page) || page.leftToc == true) && theme.tool.leftToc,
             path: theme.resources.theme.optional_css.leftToc
         },
         returnToLast: {
@@ -143,9 +147,28 @@
         <link rel="preload" href="/libs/fonts/LXGWWenKai-Regular/11181e810bd4c3f025767cb1b971e7ac.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/notoserifsc-medium-webfont.woff2" as="font" type="font/woff2" crossorigin>
         <link rel="preload" href="/fonts/unicons.woff2" as="font" type="font/woff2" crossorigin>
-        <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' />
+        <% if (!locals.loadedLibs.includes("lxgwwenkai")) { %>
+            <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' />
+            <% locals.loadedLibs.push("lxgwwenkai"); %>
+        <% } %>
     <% } else { %>
-        <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' media="defer" onload="this.media='all'" />
+        <% if (!locals.loadedLibs.includes("lxgwwenkai")) { %>
+            <link rel='stylesheet' href='<%- cdn_lib_url("lxgwwenkai") %>' media="defer" onload="this.media='all'" />
+            <% locals.loadedLibs.push("lxgwwenkai"); %>
+        <% } %>
     <% } %>
-    <link rel='stylesheet' href='<%- cdn_lib_url("fontawesome") %>' media="defer" onload="this.media='all'" />
+    <% if (!locals.loadedLibs.includes("fontawesome")) { %>
+        <link rel='stylesheet' href='<%- cdn_lib_url("fontawesome") %>' media="defer" onload="this.media='all'" />
+        <% locals.loadedLibs.push("fontawesome"); %>
+    <% } %>
+
+    <!-- Pjax 支持 -->
+    <% if (!locals.loadedLibs.includes('jquery')) { %>
+        <script src="<%= cdn_lib_url('jquery') %>"></script>
+        <% locals.loadedLibs.push('jquery'); %>
+    <% } %>
+    <% if (!locals.loadedLibs.includes('pjax')) { %>
+        <script src="<%= cdn_lib_url('pjax') %>"></script>
+        <% locals.loadedLibs.push('pjax'); %>
+    <% } %>
 </head>
