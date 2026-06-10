@@ -96,7 +96,7 @@
 
 	//首次加载调用
 	o(document).ready(function() {
-		console.log("init return to top button");
+		// console.log("init return to top button");
         initReturnToTopJS();
     });
 	// 暴露到全局 window，外部就能调用了

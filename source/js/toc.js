@@ -103,7 +103,7 @@
 
   //首次加载调用
 	o(document).ready(function() {
-    console.log("init left toc");
+    // console.log("init left toc");
     initLeftTOC();
   });
   // 暴露到全局，供 PJAX 调用

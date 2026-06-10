@@ -17,7 +17,7 @@ function randomHeaderText() {
 
 // 1. 首次页面加载执行
 $(document).ready(function() {
-  console.log("init random header");
+//   console.log("init random header");
   randomHeaderText();
 });
 

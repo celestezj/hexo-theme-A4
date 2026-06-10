@@ -32,7 +32,7 @@
 
 	//首次加载调用
 	o(document).ready(function() {
-		console.log("init return to last page button");
+		// console.log("init return to last page button");
         initReturnToLast();
     });
 	// 暴露到全局，供 PJAX 调用

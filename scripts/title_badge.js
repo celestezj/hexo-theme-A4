@@ -18,7 +18,7 @@ function addHeaderMark() {
 
 // 首次整页加载
 document.addEventListener('DOMContentLoaded', function() {
-  console.log("init header mark");
+  // console.log("init header mark");
   addHeaderMark();
 });
 

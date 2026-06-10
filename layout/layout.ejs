@@ -320,7 +320,7 @@ var optionalJsFiles = {
         <% } %>
         <script>
             if (window.mermaid) {
-                console.log('init mermaid');
+                // console.log('init mermaid');
                 window.mermaid.initialize(<%= JSON.stringify(config.mermaid.options || {}) %>);
             }
         </script>
@@ -387,7 +387,7 @@ var optionalJsFiles = {
 
         // 页面加载完成后执行
         document.addEventListener('DOMContentLoaded', function () {
-            console.log("init tabs");
+            // console.log("init tabs");
             tabsFn.clickFnOfTabs()
             tabsFn.backToTop()
         })
@@ -412,7 +412,7 @@ var optionalJsFiles = {
         function initSearch() {
             if (window.searchInited) return;
             window.searchInited = true;
-            console.log("init search");
+            // console.log("init search");
             fetch('/search-min.json')
                 .then(res => res.json())
                 .then(data => { window.searchData = data; });
@@ -471,10 +471,10 @@ var optionalJsFiles = {
     <script>
     // Pjax 动态内容重新初始化函数
     function initDynamicContent() {
-        console.log("auto call pjax:complete callback start...");
+        // console.log("auto call pjax:complete callback start...");
         // 1. 重新初始化 Tab 组件
         if (typeof tabsFn !== 'undefined' && tabsFn.clickFnOfTabs) {
-            console.log("reinit tabs");
+            // console.log("reinit tabs");
             tabsFn.clickFnOfTabs();
         }
         if (typeof tabsFn !== 'undefined' && tabsFn.backToTop) {
@@ -485,7 +485,7 @@ var optionalJsFiles = {
         <% if (config.mermaid && config.mermaid.enable) { %>
         if (window.mermaid) {
             try {
-                console.log('reinit mermaid');
+                // console.log('reinit mermaid');
                 // 重置配置（仅设置一次，不重复初始化）
                 window.mermaid.initialize({
                 startOnLoad: false,
@@ -502,7 +502,7 @@ var optionalJsFiles = {
                     }
                 }
             } catch (e) {
-                console.warn('⚠️ Mermaid 渲染失败:', e);
+                // console.warn('⚠️ Mermaid 渲染失败:', e);
             }
         }
         <% } %>
@@ -547,7 +547,7 @@ var optionalJsFiles = {
             btn.textContent = 'copied';
             setTimeout(() => btn.textContent = 'copy', 1500);
             } catch (e) {
-            console.warn('复制失败', e);
+            // console.warn('复制失败', e);
             }
         };
         });
@@ -555,40 +555,40 @@ var optionalJsFiles = {
         // 5. 重置返回顶部按钮
         <% if (theme.tool.returnToTop) { %>
             if (window.initReturnToTopJS) {
-                console.log("reinit return to top button");
+                // console.log("reinit return to top button");
                 window.initReturnToTopJS();
             }
         <% } %>
         // 6. 重置返回上一页按钮
         <% if (theme.tool.returnToLast) { %>
             if (window.initReturnToLast) {
-                console.log("reinit return to last page button");
+                // console.log("reinit return to last page button");
                 window.initReturnToLast();
             }
         <% } %>
         // 7. 重置文章页面左侧leftTOC导航栏
         <% if (theme.tool.leftToc) { %>
             if (window.initLeftTOC) {
-                console.log("reinit left toc");
+                // console.log("reinit left toc");
                 window.initLeftTOC();
             }
         <% } %>
 
         // 8. 重置标题后缀层级标记（见title_badge.js）
         if (window.addHeaderMark) {
-            console.log("reinit header mark");
+            // console.log("reinit header mark");
             window.addHeaderMark();
         }
         // 9. 重置文章页面顶部随机句子（见randomHeaderContent.js）
         if (window.randomHeaderText) {
-            console.log("reinit post random header");
+            // console.log("reinit post random header");
             window.randomHeaderText();
         }
 
         //10. 图片懒加载重新扫描
         <% if (config.lazyload && config.lazyload.enable) { %>
             if (window.imageLazyLoadSetting) {
-                console.log("reinit img lazyload");
+                // console.log("reinit img lazyload");
                 // 强制懒加载重新扫描新图片（isSPA: true：pjax跳转后滚动才会重新扫描图片列表并懒加载，但问题是：PJAX 跳转后不会自动触发滚动！所以你不手动滚动的话pjax新加载的图片永远不会触发懒加载，导致一直显示loading占位图）
                 window.imageLazyLoadSetting.processImages(true);
             }
@@ -597,7 +597,7 @@ var optionalJsFiles = {
         // 11. 重新加载不蒜子统计
         <% if (!theme.no_internet_local_deploy && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
         try {
-            console.log("reinit busuanzi");
+            // console.log("reinit busuanzi");
             const old = document.getElementById('busuanzi-script');
             if (old) old.remove();
             const script = document.createElement('script');
@@ -606,7 +606,7 @@ var optionalJsFiles = {
             script.async = true;
             document.body.appendChild(script);
         } catch (e) {
-            console.warn('⚠️ Busuanzi 加载失败:', e);
+            // console.warn('⚠️ Busuanzi 加载失败:', e);
         }
         <% } %>
 
@@ -614,13 +614,13 @@ var optionalJsFiles = {
         <% if (theme.typed_printer) { %>
             setTimeout(() => {
                 // 自动执行所有 typed 打字机实例的重置动作
-                console.log("reinit typed printer");
+                // console.log("reinit typed printer");
                 for (const key in window) {
                 if (key.startsWith('initTyped_') && typeof window[key] === 'function') {
                     try {
                         window[key]();
                     } catch (e) {
-                        console.warn('⚠️ Typed printer 重置失败:', e);
+                        // console.warn('⚠️ Typed printer 重置失败:', e);
                     }
                 }
                 }
@@ -630,12 +630,12 @@ var optionalJsFiles = {
         // 13. 首页文章日历重置
         <% if (theme.post_calendar) { %>
             if (typeof initPostCalendar === 'function') {
-                console.log("reinit post-calendar");
+                // console.log("reinit post-calendar");
                 initPostCalendar();
             }
         <% } %>
 
-        console.log("pjax callback end");
+        // console.log("pjax callback end");
     }
     </script>
 <% } %>

@@ -154,7 +154,7 @@ if (!window._calendarFirstInitialized) {
   window._calendarFirstInitialized = true;
   // 首次加载完成执行initPostCalendar()
   document.addEventListener('DOMContentLoaded', () => {
-    console.log("init post-calendar");
+    // console.log("init post-calendar");
     initPostCalendar();
   });
   // 窗口缩放防抖重绘
@@ -170,7 +170,7 @@ if (!window._calendarFirstInitialized) {
     // 安全判断：容器不存在就不执行
     if (document.getElementById('post-calendar')) {
         window.resizeCalendarTimer = setTimeout(() => {
-            console.log("resize post-calendar");
+            // console.log("resize post-calendar");
             if (window.myCalendarChart) {
             window.myCalendarChart.resize();
             } else {
