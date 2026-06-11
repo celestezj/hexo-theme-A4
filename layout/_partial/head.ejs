@@ -56,8 +56,8 @@
         },
         waline: {
             check: theme.enable_pjax ?
-                theme.comment.enable && !theme.no_internet_local_deploy && (theme.comment.use === 'waline') :
-                (is_post() || is_page()) && theme.comment.enable && !theme.no_internet_local_deploy && 
+                theme.comment.enable && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.comment.use === 'waline') :
+                (is_post() || is_page()) && theme.comment.enable && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && 
                 (!page.hasOwnProperty('comment') || (page.hasOwnProperty('comment') && page.comment)) && (theme.comment.use === 'waline'),
             path: theme.resources.theme.optional_css.waline
         },

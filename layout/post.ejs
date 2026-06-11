@@ -70,7 +70,7 @@
                     <span>阅读估时：<%= min2read(page.content) %>分钟</span>
                 <% } %>
                 <% if(theme.postInfo.viewCount) { %>
-                    <% if (!theme.no_internet_local_deploy) { %>
+                    <% if (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) { %>
                         <% if(theme.postInfo.wordCount || theme.postInfo.updateDate|| theme.postInfo.readTime) {  %>
                             &nbsp; | &nbsp;
                         <% } %>

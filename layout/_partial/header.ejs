@@ -2,7 +2,7 @@
 
 <% if(theme.index.header != null || theme.index.header == "") {%>
     <div class="index-header-line" >
-        <% if(theme.index.hitokoto && !theme.no_internet_local_deploy) { %>
+        <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
             <span id="quote"></span>
             <script src="<%= url_for('/js/hitokoto.js') %>" ></script>
         <% } else { %>

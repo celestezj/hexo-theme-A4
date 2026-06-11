@@ -1,4 +1,4 @@
-<% if (theme.comment.enable && !theme.no_internet_local_deploy) { %>
+<% if (theme.comment.enable && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
     <div class="comments-container">
     <div id="comment-anchor"></div>
     <div class="comment-area-title">

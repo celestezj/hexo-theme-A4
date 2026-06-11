@@ -19,7 +19,7 @@
         <% if(theme.indexInfo.allWordCount) { %>
         <span>本站总字数：<%= totalcount(site) %></span>
         <% } %>
-        <% if (!theme.no_internet_local_deploy) { %>
+        <% if (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) { %>
           <% if(theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>
               <div class="footer-last-span-right">
           <% } else if(!theme.indexInfo.allWordCount && theme.indexInfo.allViewCount) { %>

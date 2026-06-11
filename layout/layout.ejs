@@ -146,7 +146,7 @@
         <% } %>
         <% } %>
 
-        <% if (theme.comment.enable && !theme.no_internet_local_deploy) { %>
+        <% if (theme.comment.enable && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
           <% if (theme.comment.use === 'waline') { %>
             <% if (theme.enable_pjax) { %>
                 <script src="<%= theme.waline_js %>"></script>
@@ -394,7 +394,7 @@ var optionalJsFiles = {
     </script>
 
     <%# 不蒜子统计 %>
-    <% if (!theme.no_internet_local_deploy && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
+    <% if ((!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
         <script id="busuanzi-script" async src="<%= theme.busuanzi_js %>"></script>
     <% } %>
 
@@ -595,7 +595,7 @@ var optionalJsFiles = {
         <% } %>
 
         // 11. 重新加载不蒜子统计
-        <% if (!theme.no_internet_local_deploy && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
+        <% if ((!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
         try {
             // console.log("reinit busuanzi");
             const old = document.getElementById('busuanzi-script');
