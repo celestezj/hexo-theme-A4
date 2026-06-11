@@ -110,7 +110,11 @@
 
     <%# 加载自定义CSS %>
     <% if(theme.inject.css) { %>
-        <%- css(theme.inject.css) %>
+        <% if (cdnEnabled) { %>
+            <%- css(cdn_theme_url(theme.inject.css)) %>
+        <% } else { %>
+            <%- css(theme.inject.css) %>
+        <% } %>
     <% } %>
 
     <% if(theme.baseElement.href || theme.baseElement.target) { %>

@@ -4,7 +4,13 @@
     <div class="index-header-line" >
         <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
             <span id="quote"></span>
-            <script src="<%= url_for('/js/hitokoto.js') %>" ></script>
+            <% if (!theme.enable_pjax) { %>
+                <% if (is_cdn_enabled()) { %>
+                    <script src="<%= cdn_theme_url('/js/hitokoto.js') %>" ></script>
+                <% } else { %>
+                    <script src="<%= url_for('/js/hitokoto.js') %>" ></script>
+                <% } %>
+            <% } %>
         <% } else { %>
             <div id="hiddenHeaderContentArray" style="display: none;">
                 <% var headerContentArray = theme.index.header %>

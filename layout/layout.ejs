@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+<%
+// 获取CDN开关配置
+var cdnEnabled = is_cdn_enabled();
+%>
 <%# 挂载到locals，全模板共享，单请求生命周期唯一 %>
 <% if (!locals.loadedLibs) locals.loadedLibs = []; %>
 <html lang="<%= config.language || 'en' %>">
@@ -158,6 +162,16 @@
             <% } %>
           <% } %>
         <% } %>
+
+        <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
+            <% if (theme.enable_pjax) { %>
+                <% if (cdnEnabled) { %>
+                    <script src="<%= cdn_theme_url('/js/hitokoto.js') %>" ></script>
+                <% } else { %>
+                    <script src="<%= url_for('/js/hitokoto.js') %>" ></script>
+                <% } %>
+            <% } %>
+        <% } %>
         
         <% if (theme.typed_printer) { %>
             <% if (!locals.loadedLibs.includes('typed-printer')) { %>
@@ -249,9 +263,6 @@
     </body>
 
 <%
-// 获取CDN开关配置
-var cdnEnabled = is_cdn_enabled();
-
 // 定义JS文件列表
 var baseJsFiles = get_list_from_config(theme.resources.theme.footer_js);
 
@@ -632,6 +643,14 @@ var optionalJsFiles = {
             if (typeof initPostCalendar === 'function') {
                 // console.log("reinit post-calendar");
                 initPostCalendar();
+            }
+        <% } %>
+
+        // 14. 首页一言
+        <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
+            if (typeof getHitokoto === 'function') {
+                // console.log("reinit hitokoto");
+                getHitokoto();
             }
         <% } %>
 
