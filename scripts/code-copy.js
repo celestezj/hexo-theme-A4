@@ -12,8 +12,8 @@ hexo.extend.filter.register('after_render:html', function(html) {
   padding: 1px 6px;
   font-size: 11px;
   color: #555;
-  background: #f7f7f7;
-  border: 1px solid #ddd;
+  background: #cccccc;
+  border: 1px solid #dddddd;
   border-radius: 2px;
   cursor: pointer;
   z-index: 99;
@@ -38,7 +38,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // 创建按钮
     const btn = document.createElement('button');
     btn.className = 'code-copy-btn';
-    btn.textContent = 'copy';
+    // btn.textContent = 'copy';
+    btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
     wrapper.appendChild(btn);
 
     // 复制逻辑
@@ -52,8 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         .replace(/&amp;/g, '&')
         .trim();
       await navigator.clipboard.writeText(text);
-      btn.textContent = 'copied';
-      setTimeout(() => btn.textContent = 'copy', 1500);
+      // btn.textContent = 'copied';
+      btn.innerHTML = '<i class="fa-solid fa-check"></i>';
+      // setTimeout(() => btn.textContent = 'copy', 1500);
+      setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 1500);
     });
   });
 });
