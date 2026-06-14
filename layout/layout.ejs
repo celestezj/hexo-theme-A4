@@ -610,17 +610,19 @@ var optionalJsFiles = {
 
         // 11. 重新加载不蒜子统计
         <% if ((!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
-        try {
-            // console.log("reinit busuanzi");
-            const old = document.getElementById('busuanzi-script');
-            if (old) old.remove();
-            const script = document.createElement('script');
-            script.id = 'busuanzi-script';
-            script.src = '<%= theme.busuanzi_js %>'; //动态加载busuanzi.pure.mini.js会自动回填busuanzi_value_page_pv和busuanzi_value_site_pv
-            script.async = true;
-            document.body.appendChild(script);
-        } catch (e) {
-            // console.warn('⚠️ Busuanzi 加载失败:', e);
+        if (document.getElementById('busuanzi_container_page_pv') || document.getElementById('busuanzi_container_site_pv')) {
+            try {
+                // console.log("reinit busuanzi");
+                const old = document.getElementById('busuanzi-script');
+                if (old) old.remove();
+                const script = document.createElement('script');
+                script.id = 'busuanzi-script';
+                script.src = '<%= theme.busuanzi_js %>'; //动态加载busuanzi.pure.mini.js会自动回填busuanzi_value_page_pv和busuanzi_value_site_pv
+                script.async = true;
+                document.body.appendChild(script);
+            } catch (e) {
+                // console.warn('⚠️ Busuanzi 加载失败:', e);
+            }
         }
         <% } %>
 
