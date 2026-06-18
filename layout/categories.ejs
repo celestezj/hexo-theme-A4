@@ -90,7 +90,7 @@
   }  %>
       <% for (let i = 0; i < categoriesList.size(); i++) { %>
         <li class="">
-            <a href="/categories<%- url_for(categoriesList.get(i)) %>"><%= categoriesList.get(i) %></a>
+            <a href="/categories<%- url_for(categoriesList.get(i)) %>/"><%= categoriesList.get(i) %></a>
             <span><i><%= categoriesHashMap.get(categoriesList.get(i)) %></i></span>
         </li>
     <% } %>

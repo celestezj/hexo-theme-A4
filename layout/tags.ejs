@@ -83,7 +83,7 @@
   } %>
       <% for (let i = 0; i < tagList.size(); i++) { %>
         <li class="inline-li">
-            <a href="/tags<%- url_for(tagList.get(i)) %>"><%= tagList.get(i) %></a>
+            <a href="/tags<%- url_for(tagList.get(i)) %>/"><%= tagList.get(i) %></a>
             <span><i><%= tagHashMap.get(tagList.get(i)) %></i></span>
         </li>
     <% } %>

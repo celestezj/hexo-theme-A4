@@ -13,7 +13,7 @@ hexo.extend.filter.register('after_render:html', function(html) {
   font-size: 11px;
   color: #555;
   background: #cccccc;
-  border: 1px solid #dddddd;
+  border: 1px solid #cccccc;
   border-radius: 2px;
   cursor: pointer;
   z-index: 99;
