@@ -543,3 +543,12 @@ span[alt='wavy'] {
 .paper .callout-danger .callout-icon {
   color: #cf222e;
 }
+/* 修复 Mermaid 8.x 版本生成 SVG 后文字变粗问题
+ * Mermaid 8.x 的 sequenceDiagram 默认会给 text 添加 stroke 描边：
+ * .messageText { fill:#333; stroke:#333; }
+ * SVG 文字描边会导致中文字体视觉加粗、发黑。
+ * 禁用 text stroke，恢复正常字体渲染效果。
+ */
+pre.mermaid svg text {
+    stroke: none !important;
+}
