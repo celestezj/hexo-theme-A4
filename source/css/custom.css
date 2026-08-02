@@ -552,3 +552,7 @@ span[alt='wavy'] {
 pre.mermaid svg text {
     stroke: none !important;
 }
+/* 内部SVG强制自适应，覆盖svg自带行内样式 */
+pre.mermaid svg {
+  height: auto !important; /* 取消固定555高度，自动等比缩放 */
+}
