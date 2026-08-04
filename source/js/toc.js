@@ -77,6 +77,13 @@
     }
   });
 
+  // PJAX 修复：tocify 本应在 window.load 时把 extendPageScroll 置为 false，
+  // 但 pjax 导航不会再次触发 window.load，标志卡在 true，导致首次滚到底部时
+  // 自动 $("html, body").animate() 回弹（页面上下抖动）。
+  // 手动对齐非 PJAX 行为：保留 extendPage 占位（TOC 末项点击仍能定位），仅禁自动回滚。
+  var tocInst = $("#toc").data("toc-tocify");
+  if (tocInst) tocInst.extendPageScroll = false;
+
   // ===============================
   // 恢复最后一个 span 的文字
   // ===============================
