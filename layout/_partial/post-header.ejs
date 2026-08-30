@@ -60,7 +60,26 @@ var cdnEnabled = is_cdn_enabled();
    
     <ul class="nav">
         <% for (name in theme.menu) { %>
-            <% if(theme.menu[name].substring(1, theme.menu[name].length - 1) == path.substring(0, path.indexOf("/"))) { %>
+            <% 
+                // 菜单链接，例如 "/list/"
+                let menuLink = theme.menu[name];
+                // 提取菜单路径段，去掉首尾斜杠
+                let menuSeg = menuLink.substring(1, menuLink.length - 1);
+
+                // 当前浏览器页面path，如 list/index.html 或 /posts/104e1f98/index.html
+                let currentSeg = path.substring(0, path.indexOf("/"));
+
+                // 如果菜单是 list，那么只要当前页面是 list 或者 posts，都命中高亮
+                let isActive = false;
+                if (menuSeg === "list") {
+                    // list菜单：匹配 /list/ 页面，以及所有posts文章详情页
+                    isActive = (currentSeg === "list" || currentSeg === "posts");
+                } else {
+                    // 其他菜单保持原来逻辑
+                    isActive = (menuSeg === currentSeg);
+                }
+            %>
+            <% if(isActive) { %>
                 <li><i>
                     <% if(theme.color.enable) { %>
                         <u>
