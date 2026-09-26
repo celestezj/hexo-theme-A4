@@ -129,7 +129,17 @@ var cdnEnabled = is_cdn_enabled();
                 // Pjax 加载完成后
                 window.scrollTo(0, 0);
                 // 重新初始化动态内容
-                initDynamicContent();
+                // initDynamicContent 定义于页面底部脚本，首次加载完成前点击可能尚未就绪，
+                // 故采用带次数上限的兜底重试（50*100ms=5s），既避免 ReferenceError，也不会无限重试
+                (function initWhenReady(retries) {
+                    if (typeof initDynamicContent === 'function') {
+                        initDynamicContent();
+                    } else if (retries > 0) {
+                        setTimeout(function() { initWhenReady(retries - 1); }, 100);
+                    } else {
+                        console.log('[pjax] initDynamicContent 在 5s 内未就绪，已跳过本次动态重初始化', location.href);
+                    }
+                })(50);
             });
         </script>
         <% } %>
