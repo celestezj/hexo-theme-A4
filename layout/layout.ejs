@@ -415,8 +415,26 @@ var optionalJsFiles = {
     </script>
 
     <%# 不蒜子统计 %>
+    <%# 必须延迟到 window.load 之后动态注入：async 脚本及其内部的 JSONP 子请求都会阻塞 load 事件， %>
+    <%# 而 mermaid v8 的自动渲染挂在 window.load 上，若此处直接加载不蒜子会把 mermaid 出图一起拖慢 %>
     <% if ((!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
-        <script id="busuanzi-script" async src="<%= theme.busuanzi_js %>"></script>
+        <script>
+            (function () {
+                function injectBusuanzi() {
+                    if (document.getElementById('busuanzi-script')) return;
+                    var s = document.createElement('script');
+                    s.id = 'busuanzi-script';
+                    s.async = true;
+                    s.src = '<%= theme.busuanzi_js %>';
+                    document.body.appendChild(s);
+                }
+                if (document.readyState === 'complete') {
+                    injectBusuanzi();
+                } else {
+                    window.addEventListener('load', injectBusuanzi);
+                }
+            })();
+        </script>
     <% } %>
 
     <!-- 搜索弹窗（全局只初始化一次，Pjax 永远有效，无需重复初始化） -->
