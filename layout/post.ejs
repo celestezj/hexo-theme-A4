@@ -72,11 +72,14 @@
                 <% if(theme.postInfo.viewCount) { %>
                     <% if (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) { %>
                         <% if(theme.postInfo.wordCount || theme.postInfo.updateDate|| theme.postInfo.readTime) {  %>
-                            &nbsp; | &nbsp;
+                            <span id="<%= visit_counter_id_prefix() %>_container_page_pv">
+                                &nbsp; | &nbsp; 阅读量：<span id="<%= visit_counter_id_prefix() %>_value_page_pv"></span>次
+                            </span>
+                        <% } else { %>
+                            <span id="<%= visit_counter_id_prefix() %>_container_page_pv">
+                                阅读量：<span id="<%= visit_counter_id_prefix() %>_value_page_pv"></span>次
+                            </span>
                         <% } %>
-                        <span id="busuanzi_container_page_pv">
-                            阅读量：<span id="busuanzi_value_page_pv"></span>次
-                        </span>
                     <% } %>
                 <% } %>
             </div>
