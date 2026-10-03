@@ -636,17 +636,20 @@ var optionalJsFiles = {
             }
         <% } %>
 
-        // 11. 重新加载访问量统计（busuanzi / vercount）
+        // 11. 重新加载访问量统计（busuanzi / vercount / busuanzicc）
         <% if ((!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) && (theme.postInfo.viewCount || theme.indexInfo.allViewCount)) { %>
-        var vcIdPrefix = '<%= visit_counter_id_prefix() %>';
-        if (document.getElementById(vcIdPrefix + '_container_page_pv') || document.getElementById(vcIdPrefix + '_container_site_pv')) {
+        if (document.getElementById('<%= visit_counter_value_id("page_pv") %>') || document.getElementById('<%= visit_counter_value_id("site_pv") %>')) {
             try {
                 // console.log("reinit visit counter");
+                <% if (visit_counter_needs_reset()) { %>
+                // busuanzi.cc 的脚本用 window.busuanziRequestSent 做了「只执行一次」守卫，重建前必须复位，否则站内跳转后不再更新
+                window.busuanziRequestSent = false;
+                <% } %>
                 const old = document.getElementById('visit-counter-script');
                 if (old) old.remove();
                 const script = document.createElement('script');
                 script.id = 'visit-counter-script';
-                script.src = '<%= visit_counter_script() %>'; //重新加载会自动回填 <prefix>_value_page_pv 和 <prefix>_value_site_pv
+                script.src = '<%= visit_counter_script() %>'; //重新加载会自动回填访问量数字
                 script.async = true;
                 document.body.appendChild(script);
             } catch (e) {
