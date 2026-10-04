@@ -26,7 +26,7 @@
               <div>
           <% } %>
           <% if(theme.indexInfo.allViewCount) { %>
-                  <span id="<%= visit_counter_container_id('site_pv') %>" class="">
+                  <span id="<%= visit_counter_container_id('site_pv') %>" class=""<% if (visit_counter_hide_container()) { %> style="display:none"<% } %>>
                       本站总访问：<span id="<%= visit_counter_value_id('site_pv') %>"></span>次
                   </span>
               </div>

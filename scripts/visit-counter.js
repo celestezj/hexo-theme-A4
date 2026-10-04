@@ -47,6 +47,14 @@ function visitCounterNeedsReset(themeConfig) {
   return getVisitCounterProvider(themeConfig) === 'busuanzicc';
 }
 
+// 容器初始是否隐藏：vercount 的脚本加载后会先隐藏容器、待 fetch 返回再显示，
+// 若容器初始可见，就会先闪出「阅读量：次」(数字为空)、随后消失约一秒再带数字出现。
+// 初始即隐藏可消除该闪烁。busuanzi 起点不隐藏(成功时自行 shows())，busuanzicc
+// 只写数值、从不管理容器(初始隐藏后将永不再显示)，故二者均保持可见。
+function visitCounterContainerInitiallyHidden(themeConfig) {
+  return getVisitCounterProvider(themeConfig) === 'vercount';
+}
+
 hexo.extend.helper.register('visit_counter_script', function () {
   return getVisitCounterScript(this.theme);
 });
@@ -67,10 +75,15 @@ hexo.extend.helper.register('visit_counter_needs_reset', function () {
   return visitCounterNeedsReset(this.theme);
 });
 
+hexo.extend.helper.register('visit_counter_hide_container', function () {
+  return visitCounterContainerInitiallyHidden(this.theme);
+});
+
 module.exports = {
   getVisitCounterProvider,
   getVisitCounterScript,
   getVisitCounterValueId,
   getVisitCounterContainerId,
-  visitCounterNeedsReset
+  visitCounterNeedsReset,
+  visitCounterContainerInitiallyHidden
 };

@@ -72,11 +72,11 @@
                 <% if(theme.postInfo.viewCount) { %>
                     <% if (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment)) { %>
                         <% if(theme.postInfo.wordCount || theme.postInfo.updateDate|| theme.postInfo.readTime) {  %>
-                            <span id="<%= visit_counter_container_id('page_pv') %>">
+                            <span id="<%= visit_counter_container_id('page_pv') %>"<% if (visit_counter_hide_container()) { %> style="display:none"<% } %>>
                                 &nbsp; | &nbsp; 阅读量：<span id="<%= visit_counter_value_id('page_pv') %>"></span>次
                             </span>
                         <% } else { %>
-                            <span id="<%= visit_counter_container_id('page_pv') %>">
+                            <span id="<%= visit_counter_container_id('page_pv') %>"<% if (visit_counter_hide_container()) { %> style="display:none"<% } %>>
                                 阅读量：<span id="<%= visit_counter_value_id('page_pv') %>"></span>次
                             </span>
                         <% } %>
