@@ -125,6 +125,16 @@ var cdnEnabled = is_cdn_enabled();
             }).on('pjax:start', function() {
                 // Pjax 开始加载前
                 // window.scrollTo(0, 0);
+                // hexo-blog-encrypt 的浏览器脚本是以 <script src> 形式注入的，而 jquery-pjax 注入外部脚本时
+                // 会按 src 去重（源码 y()：文档中已存在同 src 的 <script> 就跳过执行）。因此首次进入加密文章后，
+                // 该脚本会一直留在页面里，返回上一页再重新进入时不会再次执行，密码表单便丢失事件绑定、点按钮无反应。
+                // 解法：每次 Pjax 跳转开始前清掉它，令 pjax 在目标页为加密文章时重新注入并执行。
+                <% if (config.encrypt) { %>
+                    document.querySelectorAll('script[src*="hbe."]').forEach(function (s) {
+                        if (s.src) window.__hbeBundleSrc = s.src; // 记住 src，供「从 pjax 缓存恢复」场景兜底重执行
+                        s.remove();
+                    });
+                <% } %>
             }).on('pjax:end', function() { //之前写的pjax:complete，但是return to last（即window.history.back()）后只会触发pjax:end，而不会触发pjax:complete，导致一些reinit动作无法被执行到，因此更换为pjax:end
                 // Pjax 加载完成后
                 window.scrollTo(0, 0);
@@ -140,6 +150,18 @@ var cdnEnabled = is_cdn_enabled();
                         console.log('[pjax] initDynamicContent 在 5s 内未就绪，已跳过本次动态重初始化', location.href);
                     }
                 })(50);
+
+                // 兜底：从 pjax 缓存恢复的页面不会走脚本注入流程（没有 y() 调用），
+                // 若当前是加密文章且文档中已无 hbe 脚本，则用记住的 src 重新执行一次解密初始化。
+                <% if (config.encrypt) { %>
+                    if (document.getElementById('hexo-blog-encrypt') &&
+                        !document.querySelector('script[src*="hbe."]') &&
+                        window.__hbeBundleSrc) {
+                        const s = document.createElement('script');
+                        s.src = window.__hbeBundleSrc;
+                        document.head.appendChild(s);
+                    }
+                <% } %>
             });
         </script>
         <% } %>
@@ -506,9 +528,11 @@ var optionalJsFiles = {
         document.addEventListener('DOMContentLoaded', initSearch);
     </script>
 
-<% if (theme.enable_pjax) { %>
+<% if (theme.enable_pjax || config.encrypt) { %>
     <script>
-    // Pjax 动态内容重新初始化函数
+    // 动态内容重新初始化函数：Pjax 跳转后、以及加密文章解密后都会调用
+    // 注意：加密插件本身并不读取 encrypt.enable（它只以「是否存在 password」决定是否加密），
+    // 这里把 config.encrypt 当作主题侧的开关，以便关闭 Pjax 时解密后仍能重新初始化动态内容。
     function initDynamicContent() {
         // console.log("auto call pjax:complete callback start...");
         // 1. 重新初始化 Tab 组件
@@ -693,6 +717,18 @@ var optionalJsFiles = {
 
         // console.log("pjax callback end");
     }
+
+    // hexo-blog-encrypt 解密完成后重新初始化动态内容
+    // 插件在「解密成功且已把明文 DOM 替换进页面之后」于 window 上派发 'hexo-blog-decrypt'
+    // 事件（detail.mode 为 'manual'（手动输入密码）或 'cached'（自动保存的密码））。
+    // 注意：事件派发在 window 上，必须用 window.addEventListener 监听（document 监听不到）。
+    <% if (config.encrypt) { %>
+        window.addEventListener('hexo-blog-decrypt', function () {
+            if (typeof initDynamicContent === 'function') {
+                initDynamicContent();
+            }
+        });
+    <% } %>
     </script>
 <% } %>
 </html>
