@@ -455,11 +455,14 @@ span[alt='wavy'] {
 .post-edit-link:hover i {
   color: #333 !important; /* 悬浮变深 */
 }
-/*控制部分内容在手机端的显示，当前认为屏幕宽度小于420px时为手机端*/
+/*控制部分内容在手机端的显示，当前认为屏幕宽度小于420px时为手机端。参照butterfly博客，改为500*/
 .onlydisplayonphone{
     display:none !important;
 }
-@media only screen and (max-width: 420px){
+@media only screen and (max-width: 500px){
+    .notdisplayonphone {
+        display:none !important;
+    }
     .onlydisplayonphone{
         display: inline-block !important; /*inline*/
     }
