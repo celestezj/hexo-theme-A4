@@ -5,7 +5,7 @@
 </div>
 <style type="text/css">
     .index-main {
-        padding: 36px 2.6vw 0; /*首页主体四边距控制（原本是padding: 36px 4.5vw 0;）*/
+        padding: 36px clamp(10px, 2.6vw, 50px) 0; /*首页主体四边距控制（原本是padding: 36px 4.5vw 0;）；clamp 修复浏览器缩放时 vw 边距占比异常*/
     }
     #post-calendar {
         width: 100%;

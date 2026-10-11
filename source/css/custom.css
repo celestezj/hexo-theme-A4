@@ -752,3 +752,23 @@ html {
 .post-md div.ghcard a.ghcard {
   margin: 0;
 }
+
+/* 修复浏览器缩放时 vw 内边距占比异常变大：vw 相对视口而非纸张，缩放后物理宽度不变、
+   纸张却缩小。用 clamp 封顶，窄屏仍随 vw 收缩。 */
+.paper {
+  padding: clamp(16px, 4vw, 72px);
+}
+.paper-main {
+  padding: 36px clamp(20px, 4vw, 72px) 0;
+}
+.paper-comment {
+  padding: clamp(16px, 4vw, 72px);
+}
+.paper-comment-main {
+  padding: 72px clamp(28px, 8vw, 96px) 24px;
+}
+/* 首页：style.css 基础值为 4.5vw（日历开启时由 calendar.ejs 内嵌样式覆盖）。
+   注意内嵌样式晚于本文件，日历开启场景的修复须改 calendar.ejs。 */
+.index-main {
+  padding: 36px clamp(10px, 4.5vw, 50px) 0;
+}
