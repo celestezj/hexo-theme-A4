@@ -715,3 +715,40 @@ html {
   overflow-x: hidden;
   overflow-x: clip;
 }
+
+/* Ghcard（GitHub 统计卡）：移植自 Butterfly ghcard.styl，作用域 .md → .post-md */
+.post-md a.ghcard {
+  display: inline-block;
+  line-height: 0;
+  margin: 12px 0;
+  text-decoration: none;
+}
+/* A4 用 .post-md a{box-shadow:0 2px 0} 伪造链接下划线，卡片不需要（含 hover） */
+.post-md a.ghcard,
+.post-md a.ghcard:hover {
+  box-shadow: none;
+}
+.post-md .ghcard img {
+  max-width: 100%;
+  height: auto;
+}
+/* 宽度/对齐外层容器（width 走内联 style；对齐用 margin，同 div.video） */
+.post-md div.ghcard {
+  margin: 12px 0;
+  line-height: 0;
+}
+.post-md div.ghcard.center {
+  margin: 12px auto;
+  text-align: center;
+}
+.post-md div.ghcard.left {
+  margin: 12px auto 12px 0;
+  text-align: left;
+}
+.post-md div.ghcard.right {
+  margin: 12px 0 12px auto;
+  text-align: right;
+}
+.post-md div.ghcard a.ghcard {
+  margin: 0;
+}
