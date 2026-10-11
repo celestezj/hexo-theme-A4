@@ -559,3 +559,98 @@ pre.mermaid svg text {
 pre.mermaid svg {
   height: auto !important; /* 取消固定555高度，自动等比缩放 */
 }
+
+/* 媒体标签：video / videos / audio（移植自 Butterfly _tags/media.styl） */
+/* 单音视频容器加与正文段落一致的垂直边距：代码块(<figure.highlight>)无 margin，
+   若媒体 div 自身也无 margin-top，紧跟代码块时会挤成 1-2px。网格内子项不受影响
+   （.videos .video 特异性更高仍为 4px）。 */
+.post-md div.video,
+.post-md div.audio,
+.post-md div.bilibili {
+  margin: 12px 0;
+  line-height: 0;
+  text-align: center;
+}
+.post-md div.video video,
+.post-md div.audio audio {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 100%; /* 缩宽容器在小屏时播放器不超出容器 */
+}
+/* 单媒体自定义宽度+对齐：宽度(内联 style)作用于外层容器，对齐用 margin 实现。
+   center 为缺省(左右 auto 居中)；高特异性保证 .videos 网格内子项不受影响。 */
+.post-md div.video.center,
+.post-md div.audio.center { margin: 12px auto; }
+.post-md div.video.left,
+.post-md div.audio.left { margin: 12px auto 12px 0; }
+.post-md div.video.right,
+.post-md div.audio.right { margin: 12px 0 12px auto; }
+
+/* 网格两端贴齐正文：item 带 margin:4px 沟槽，若不把容器加宽 8px 并左右外扩，
+   flex 会把两端 item 收缩、各留 ~4px 内缩。负 margin 让容器真正比正文宽 8px，
+   item(100% 宽)+两端 4px margin 恰好填满、与正文对齐。.post-md 有 25px padding 兜底不溢出。 */
+.post-md div.videos {
+  width: calc(100% + 8px);
+  margin: 1em -4px -4px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-end;
+}
+.post-md div.videos .video,
+.post-md div.videos iframe {
+  width: 100%;
+  margin: 4px;
+}
+.post-md div.videos iframe {
+  border-radius: 4px;
+  min-height: 300px;
+}
+.post-md div.videos[col='1'] .video,
+.post-md div.videos[col='1'] iframe {
+  width: 100%;
+}
+.post-md div.videos[col='2'] .video,
+.post-md div.videos[col='2'] iframe {
+  width: calc(50% - 8px);
+}
+.post-md div.videos[col='3'] .video,
+.post-md div.videos[col='3'] iframe {
+  width: calc(33.33% - 8px);
+}
+.post-md div.videos[col='4'] .video,
+.post-md div.videos[col='4'] iframe {
+  width: calc(25% - 8px);
+}
+.post-md div.videos.left {
+  justify-content: flex-start;
+}
+.post-md div.videos.center {
+  justify-content: center;
+}
+.post-md div.videos.right {
+  justify-content: flex-end;
+}
+.post-md div.videos.stretch {
+  align-items: stretch;
+}
+.post-md div.videos .video,
+.post-md div.videos iframe,
+.post-md div.videos .audio {
+  transition: all 0.3s;
+}
+.post-md div.videos .video:hover,
+.post-md div.videos iframe:hover,
+.post-md div.videos .audio:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.post-md div.audio {
+  line-height: 0;
+  text-align: center;
+}
+.post-md div.audio audio {
+  outline: none;
+  width: 100%;
+}
