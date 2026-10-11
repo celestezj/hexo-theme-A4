@@ -654,3 +654,64 @@ pre.mermaid svg {
   outline: none;
   width: 100%;
 }
+
+/* Bubble 气泡注释（移植自 Butterfly bubble.styl）
+ * 来源：https://github.com/celestezj/Butterfly_3.7.0/blob/master/source/css/_tags/bubble.styl
+ * 纯 CSS hover 动画，无运行 JS；气泡背景色由 {% bubble %} 标签内联传入。
+ * A4 无 [data-theme] 选择器（深色模式由 DarkReader 处理），故删去原 .styl 的 dark 覆盖块。
+ */
+.bubble-content {
+  display: inline-block;
+  color: #e9a218;
+  font-weight: bold;
+  transition: all 0.2s ease-in-out;
+  text-shadow: rgba(35, 35, 35, 0.5);
+}
+.bubble-content:hover {
+  transition: all 0.2s ease-in-out;
+  color: #2C7FE7;
+}
+.bubble-content:hover + .bubble-notation .bubble-item {
+  transform: translate(-57px, 10px) rotateX(0deg);
+  transition: all 0.5s ease-in-out;
+  opacity: 1;
+}
+.bubble-notation {
+  display: inline-block;
+}
+.bubble-item {
+  transition: all 0.5s ease-in-out;
+  opacity: 0;
+  color: #ffffff;
+  z-index: 99;
+  display: flex;
+  position: absolute;
+  transform: translate(-57px, 10px) rotateX(90deg);
+  width: auto;
+  height: auto;
+  max-width: 400px;
+  font-size: 14px;
+  overflow: hidden;
+  padding: 20px 10px 10px 10px;
+  clip-path: polygon(5px 10px, 20px 10px, 30px 0, 40px 10px, calc(100% - 5px) 10px, 100% 15px, 100% calc(100% - 5px), calc(100% - 5px) 100%, 5px 100%, 0 calc(100% - 5px), 0 15px, 5px 10px);
+}
+
+/* Bubble 向右不越界：靠绝对定位收窄（与 Butterfly 同一机制），不在卡片上裁剪。
+   .bubble-item 是 position:absolute + width:auto（无 left/right 偏移），shrink-to-fit
+   会把靠右气泡压到最小内容宽、换行成「瘦长条」。极端行末时（如 W≈580 的 transform），
+   收窄后仍差几 px，这部分越过卡片 4vw 右内边距落到页边空白上 —— 字保持完整、不被切。
+   .paper-main 只需 position:relative 作为气泡的定位祖先；不要在此加 overflow（会裁掉那几 px）。
+   全站横向滚动条由本文件下方的 html{overflow-x:clip} 在视口级统一兜底。
+   left-toc / 返回顶部(progress-wrap) 都是 .paper-main 的兄弟节点，不受影响。 */
+.paper-main {
+  position: relative;
+}
+
+/* 根级横向溢出防护（对齐 Butterfly 的视口级做法，替代原先在卡片上的裁剪）：
+   root overflow 传播到 viewport，统一兜底一切横向溢出（含 div.videos 的 width:calc(100% + 8px)），
+   不产生横向滚动条。clip 不建滚动容器；hidden 仅作旧浏览器兜底。
+   主题无 position:sticky，fixed 的左目录/返回顶部不受 overflow 影响（overflow 不改变 fixed 定位）。 */
+html {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
