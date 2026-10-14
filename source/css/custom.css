@@ -752,6 +752,11 @@ html {
 .post-md div.ghcard a.ghcard {
   margin: 0;
 }
+@media only screen and (max-width: 500px) { /*手机端强制卡片按95%宽度显示，避免太小看不清*/
+  .post-md div.ghcard.center, .post-md div.ghcard.left, .post-md div.ghcard.right {
+    width: 95% !important;
+  }
+}
 
 /* 修复浏览器缩放时 vw 内边距占比异常变大：vw 相对视口而非纸张，缩放后物理宽度不变、
    纸张却缩小。用 clamp 封顶，窄屏仍随 vw 收缩。 */
@@ -771,4 +776,13 @@ html {
    注意内嵌样式晚于本文件，日历开启场景的修复须改 calendar.ejs。 */
 .index-main {
   padding: 36px clamp(10px, 4.5vw, 50px) 0;
+}
+
+/* abbr 缩写点线：显式补上 UA 默认样式。老版 WKWebView（iPadOS/iOS 18 及以前）
+   不支持无前缀的 text-decoration 简写带线型值，需 -webkit- 前缀，否则无下划线 */
+abbr[title] {
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  cursor: help;
 }
