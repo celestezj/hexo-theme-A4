@@ -786,3 +786,9 @@ abbr[title] {
   text-underline-offset: 2px;
   cursor: help;
 }
+/* 标签/分类下无任何可见文章时（文章全部 hide:true，列表页不生成），
+   渲染为不可点击的灰色纯文本，避免死链 */
+.tax-invisible {
+  color: var(--font-color-3);
+  cursor: default;
+}

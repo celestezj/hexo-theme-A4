@@ -107,13 +107,24 @@
             <% if(page.tags.data.length > 0 || page.categories.data.length > 0) { %>
                 <span>该篇文章被 <%= config.author %></span>
             <% } %>
+            <%
+              // 标签/分类下若没有任何可见文章，其列表页不会生成（见 hide-hidden-posts.js），
+              // 此时渲染为纯文本而非死链；将来出现可见文章会自动恢复为链接
+              var taxHasVisiblePost = function(tax) {
+                return tax.posts.toArray().some(function(p) { return !(p.hide === true); });
+              };
+            %>
             <% if(page.tags.data.length > 0) { %>
                 <span>打上标签:
                     <% var postTags = page.tags.data; %>
                     <%   for(var j = 0; j < postTags.length; j++) { %>
+                        <% if(taxHasVisiblePost(postTags[j])) { %>
                         <a href='<%- url_for(postTags[j].path)%>'>
                             <%= postTags[j].name %>
                         </a>
+                        <% } else { %>
+                        <span class="tax-invisible"><%= postTags[j].name %></span>
+                        <% } %>
                     <% }  %>
                 </span>
              <% } %>
@@ -121,9 +132,13 @@
                 <span>归为分类:
                     <% var postCategories = page.categories.data; %>
                     <%   for(var j = 0; j < postCategories.length; j++) { %>
+                        <% if(taxHasVisiblePost(postCategories[j])) { %>
                         <a href='<%- url_for(postCategories[j].path)%>'>
                             <%= postCategories[j].name %>
                         </a>
+                        <% } else { %>
+                        <span class="tax-invisible"><%= postCategories[j].name %></span>
+                        <% } %>
                     <% break;}  %>
                 </span>
             <% } %>
