@@ -8,7 +8,10 @@
                     <div class="index-header-line" >
                         <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
                             <span id="quote" style="font-size: large;"></span>
+                            <%# pjax 开启时 layout.ejs 已全局加载 hitokoto.js，此处再引一次会导致 let 重复声明报错 %>
+                            <% if (!theme.enable_pjax) { %>
                             <script src="<%= url_for('/js/hitokoto.js') %>" ></script>
+                            <% } %>
                         <% } else { %>
                             <div id="hiddenHeaderContentArray" style="display: none;">
                                 <% var headerContentArray = theme.index.header %>

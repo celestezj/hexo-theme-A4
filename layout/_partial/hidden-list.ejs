@@ -1,0 +1,94 @@
+<style>
+  /* style.css 对 .archive li span 固定 108px（日期列宽度），空态文案需放开宽度并禁止折行 */
+  .archive li span.hidden-empty-tip {
+    width: auto;
+    white-space: nowrap;
+  }
+</style>
+<div class="archive-list">
+  <ul class="archive">
+      <% var postArray = page.hiddenPosts || [] %>
+
+      <% const yearMap = {} %>
+      <% const yearList = [] %>
+
+      <!--按年份分组（generator 输出已按日期倒序）-->
+      <% postArray.forEach(function(post) {
+          var year = new Date(post.date).getFullYear();
+          if(!yearMap[year]) {
+            yearMap[year] = [];
+            yearList.push(year);
+          }
+          yearMap[year].push(post);
+      }); %>
+
+      <% if(postArray.length === 0) { %>
+        <li>
+          <span class="year-font-color hidden-empty-tip">当前没有隐藏文章</span>
+        </li>
+      <% } %>
+
+      <% yearList.forEach(function(year) { %>
+        <li>
+          <span class="year-font-color"><%= year %>[<%= yearMap[year].length %>]
+            <% if(year === yearList[0]) { %> <span class="darkmode-ignore">🍃</span> <% } %>
+          </span>
+        </li>
+        <% yearMap[year].forEach(function(thisPost) { %>
+          <li>
+            <span class="archive-date">&nbsp;&nbsp;&nbsp;<%= date(thisPost.date, "MM/DD") %>
+            </span>
+            <div class="archive-main">
+              <% if(thisPost.categories.length > 0) { %>
+                <a class="archive-title" href="/<%= thisPost.categories.data[0].path %>">
+                  <%= thisPost.categories.data[0].name %>
+                </a> |
+              <% } %>
+                <%
+                  let desc = thisPost.description || '';
+                  desc = desc.trim().replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                %>
+                <% if (desc) { %>
+                <a
+                  class="archive-title archive-tooltip"
+                  href="<%- url_for(thisPost.path) %>"
+                  data-tooltip="<%= desc %>"
+                >
+                  <%= thisPost.title %>
+                </a>
+                <% } else { %>
+                <a class="archive-title" href="<%- url_for(thisPost.path) %>">
+                  <%= thisPost.title %>
+                </a>
+                <% } %>
+            </div>
+          </li>
+        <% }); %>
+      <% }); %>
+  </ul>
+</div>
+
+<!--rough-notation风格效果（与 list 页一致）-->
+<% if(theme && theme.listInfo.enable) { %>
+  <script src="<%= url_for('/js/roughNotation.js') %>" defer></script>
+  <script>
+    if (typeof window !== 'undefined') {
+      window.themeConfig = <%- JSON.stringify(theme) %>;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.archive-title').forEach(el => {
+        const annotation = RoughNotation.annotate(el, {
+          type: themeConfig?.tool?.hoverStyle || 'underline',
+          color: themeConfig?.tool?.hoverColor || '#4f7dde',
+          animationDuration: themeConfig?.tool?.animationDuration || 800,
+        });
+        el.addEventListener('mouseenter', () => {
+          if(annotation){ annotation.show(); }
+        });
+        el.addEventListener('mouseleave', () => {
+          if(annotation){ annotation.hide(); }
+        });
+      });
+    });
+  </script>
+<% } %>

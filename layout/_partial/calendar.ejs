@@ -47,6 +47,7 @@ function initPostCalendar() {
     // post and count map.
     var dateMap = new Map();
     site.posts.forEach(function (post) {
+        if (post.hide === true) return;
         var date = post.date.format('YYYY-MM-DD');
         var count = dateMap.get(date);
         dateMap.set(date, count == null || count == undefined ? 1 : count + 1);
