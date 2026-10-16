@@ -120,6 +120,16 @@
         <% } %>
     <% } %>
 
+    <%# 加密文章的表单样式：必须全局常驻。插件自带的 <link> 位于 Pjax 片段内，
+        动态插入的样式表不阻塞渲染，自动解密时表单会有未样式帧（wave 模板还会露出黑色波浪SVG） %>
+    <% if (config.encrypt) { %>
+        <% if (cdnEnabled) { %>
+            <%- css(cdn_theme_url('/css/hbe.style.css')) %>
+        <% } else { %>
+            <%- css('/css/hbe.style.css') %>
+        <% } %>
+    <% } %>
+
     <% if(theme.baseElement.href || theme.baseElement.target) { %>
         <base
             <% if(theme.baseElement.href) { %>
