@@ -153,8 +153,12 @@ var cdnEnabled = is_cdn_enabled();
 
                 // 兜底：从 pjax 缓存恢复的页面不会走脚本注入流程（没有 y() 调用），
                 // 若当前是加密文章且文档中已无 hbe 脚本，则用记住的 src 重新执行一次解密初始化。
+                // 注意必须校验 data-hbe-format：解密后 #hexo-blog-encrypt 会被替换为同 id 但无该属性的
+                // 明文容器，而 pjax 缓存的是实时 DOM，前进恢复时会拿到这个明文容器，对它执行 hbe 初始化
+                // 会误报「incompatible plugin version」。
                 <% if (config.encrypt) { %>
-                    if (document.getElementById('hexo-blog-encrypt') &&
+                    const hbeEl = document.getElementById('hexo-blog-encrypt');
+                    if (hbeEl && hbeEl.hasAttribute('data-hbe-format') &&
                         !document.querySelector('script[src*="hbe."]') &&
                         window.__hbeBundleSrc) {
                         const s = document.createElement('script');
