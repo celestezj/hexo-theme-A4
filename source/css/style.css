@@ -485,6 +485,15 @@ a
     width: 108px;
     color: var(--font-color-2);
 }
+.archive li span.recent-updates-title
+{
+    width: auto;
+    white-space: nowrap;
+}
+.recent-updates-list .archive li
+{
+    column-gap: 12px;
+}
 .archive-main
 {
     flex: 0 1 calc( 100% - 108px );
