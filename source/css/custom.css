@@ -792,3 +792,12 @@ abbr[title] {
   color: var(--font-color-3);
   cursor: default;
 }
+/* 说说标题下方的发布时间（由 scripts/shuoshuo-date.js 注入）。
+   负上边距抵消 h2 自带的下外边距，让时间贴近标题 */
+.shuoshuo-date {
+  text-align: left;
+  font-size: 0.875rem;
+  color: var(--font-color-3);
+  margin: -30px 0 18px 0;
+  line-height: 1.5;
+}
