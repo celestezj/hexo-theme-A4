@@ -69,11 +69,14 @@ var cdnEnabled = is_cdn_enabled();
                 // 当前浏览器页面path，如 list/index.html 或 /posts/104e1f98/index.html
                 let currentSeg = path.substring(0, path.indexOf("/"));
 
-                // 如果菜单是 list，那么只要当前页面是 list 或者 posts，都命中高亮
+                // 如果菜单是 list，那么只要当前页面是 list、posts 或 cherry，都命中高亮
                 let isActive = false;
                 if (menuSeg === "list") {
-                    // list菜单：匹配 /list/ 页面，以及所有posts文章详情页
-                    isActive = (currentSeg === "list" || currentSeg === "posts");
+                    // list菜单：匹配 /list/ 页面、posts 文章详情页、/cherry/ 隐藏文章页
+                    isActive = (currentSeg === "list" || currentSeg === "posts" || currentSeg === "cherry");
+                } else if (menuSeg === "shuoshuo") {
+                    // 说说菜单：匹配 /shuoshuo/ 与 /peach/ 隐藏说说页
+                    isActive = (currentSeg === "shuoshuo" || currentSeg === "peach");
                 } else {
                     // 其他菜单保持原来逻辑
                     isActive = (menuSeg === currentSeg);
