@@ -196,6 +196,10 @@ var cdnEnabled = is_cdn_enabled();
         <% } %>
 
         <% if(theme.index.hitokoto && (!theme.no_internet_local_deploy || (theme.no_internet_local_deploy && theme.no_internet_local_deploy_enable_comment))) { %>
+            <script>
+                // 在线一言请求超时/失败时的兜底文案（index.header），供 hitokoto.js 随机取用
+                window.__HITOKOTO_FALLBACK = <%- JSON.stringify(theme.index.header || []) %>;
+            </script>
             <% if (theme.enable_pjax) { %>
                 <% if (cdnEnabled) { %>
                     <script src="<%= cdn_theme_url('/js/hitokoto.js') %>" ></script>
