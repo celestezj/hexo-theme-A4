@@ -801,3 +801,12 @@ abbr[title] {
   margin: -30px 0 18px 0;
   line-height: 1.5;
 }
+/* /peach/ 隐藏说说扁平列表 */
+.peach-list {
+  list-style: disc;
+  padding-left: 1.4em;
+  line-height: 2;
+}
+.peach-empty {
+  color: var(--font-color-3);
+}

@@ -244,6 +244,12 @@ var cdnEnabled = is_cdn_enabled();
                      <%- partial('_partial/hidden-list') %>
                      <%- partial('_partial/footer') %>
                 </div>
+            <% } else if(path == "peach/index.html") { %>
+                <div class="shadow-drop-2-top paper-main">
+                     <%- partial('_partial/post-header') %>
+                     <%- partial('_partial/peach-list') %>
+                     <%- partial('_partial/footer') %>
+                </div>
             <% } else if(path == "404.html") { %>
                 <div class="shadow-drop-2-top paper-main">
                     <%- partial('_partial/404-template') %>

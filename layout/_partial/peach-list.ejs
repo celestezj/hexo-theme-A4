@@ -1,0 +1,13 @@
+<% var list = page.hiddenShuoshuo || [] %>
+
+<% if (list.length === 0) { %>
+  <p class="peach-empty">暂无隐藏说说</p>
+<% } else { %>
+  <ul class="peach-list">
+    <% list.forEach(function(item) { %>
+      <li>
+        <a href="<%- url_for(item.path) %>"><%= date(item.date, 'YYYY.MM.DD') %> · <%= item.title %></a>
+      </li>
+    <% }) %>
+  </ul>
+<% } %>
