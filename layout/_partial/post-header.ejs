@@ -72,8 +72,8 @@ var cdnEnabled = is_cdn_enabled();
                 // 如果菜单是 list，那么只要当前页面是 list、posts 或 cherry，都命中高亮
                 let isActive = false;
                 if (menuSeg === "list") {
-                    // list菜单：匹配 /list/ 页面、posts 文章详情页、/cherry/ 隐藏文章页
-                    isActive = (currentSeg === "list" || currentSeg === "posts" || currentSeg === "cherry");
+                    // list菜单：匹配 /list/ 页面、posts 文章详情页、/cherry/ 隐藏文章页、/recent-updates/ 最近更新页
+                    isActive = (currentSeg === "list" || currentSeg === "posts" || currentSeg === "cherry" || currentSeg === "recent-updates");
                 } else if (menuSeg === "shuoshuo") {
                     // 说说菜单：匹配 /shuoshuo/ 与 /peach/ 隐藏说说页
                     isActive = (currentSeg === "shuoshuo" || currentSeg === "peach");
