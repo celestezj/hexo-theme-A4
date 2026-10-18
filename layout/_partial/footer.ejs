@@ -8,7 +8,7 @@ var deployDateText = buildDate.getUTCFullYear() + '年' + (buildDate.getUTCMonth
 %>
 <div class="footer">
     <% if(path != 'index.html') { %>
-        <span title="小破站已经运行了<%= runningDays %>天，最后一次部署时间为<%= deployDateText %>">
+        <span title="小破站已经运行了<%= runningDays %>+天，最后一次部署时间为<%= deployDateText %>">
             <%= theme.footerLink.info.replace(/\{%\s*current_year\s*%}/g, new Date().getFullYear()) %> 
 
             <% for (name in theme.footerLink) { %>

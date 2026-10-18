@@ -30,7 +30,7 @@
 
       <% yearList.forEach(function(year) { %>
         <li>
-          <span class="year-font-color"><%= year %>[<%= yearMap[year].length %>]
+          <span class="year-font-color" title="<%= year %>年总计隐藏了<%= yearMap[year].length %>篇文章"><%= year %>[<%= yearMap[year].length %>]
             <% if(year === yearList[0]) { %> <span class="darkmode-ignore">🍃</span> <% } %>
           </span>
         </li>

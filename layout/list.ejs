@@ -181,7 +181,7 @@
       <% for (let i = 0; i < allYearList.size(); i++) { %>
         <% var year = allYearList.get(i) %>
         <li>
-          <span class="year-font-color"><%= year %>[<%= hashmap.get(year).size() %>]
+          <span class="year-font-color" title="<%= year %>年总计发布了<%= hashmap.get(year).size() %>篇文章"><%= year %>[<%= hashmap.get(year).size() %>]
             <% if(i==0) { %> <span class="darkmode-ignore">🍃</span> <% } %>
           </span>
         </li>
