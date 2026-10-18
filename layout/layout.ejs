@@ -393,6 +393,19 @@ var optionalJsFiles = {
                 // console.log('init mermaid');
                 window.mermaid.initialize(<%= JSON.stringify(config.mermaid.options || {}) %>);
             }
+            // mermaid 消息线等元素带 stroke="none" 呈现属性，真正颜色来自其内部样式表；
+            // DarkReader 会把该呈现属性镜像成 !important 内联变量盖掉反色规则，导致暗色下线条消失。
+            // 渲染后移除该呈现属性（同时清掉 DarkReader 可能已注入的镜像），颜色交还给样式表。
+            window.fixMermaidStroke = function (root) {
+                (root || document).querySelectorAll('pre.mermaid svg [stroke="none"]').forEach(function (el) {
+                    el.removeAttribute('stroke');
+                    el.removeAttribute('data-darkreader-inline-stroke');
+                    el.style.removeProperty('--darkreader-inline-stroke');
+                });
+            };
+            window.addEventListener('load', function () {
+                window.fixMermaidStroke(document);
+            });
         </script>
     <% } %>
 
@@ -586,9 +599,11 @@ var optionalJsFiles = {
                 if (mermaidDoms.length !== 0) {
                     // 统一渲染（兼容 v9+/v8）
                     if (typeof mermaid.run === 'function') {
-                    window.mermaid.run({ querySelector: 'pre.mermaid', suppressErrors: true });
+                    Promise.resolve(window.mermaid.run({ querySelector: 'pre.mermaid', suppressErrors: true }))
+                        .finally(() => window.fixMermaidStroke && window.fixMermaidStroke(document));
                     } else {
                     window.mermaid.init(undefined, mermaidDoms);
+                    window.fixMermaidStroke && window.fixMermaidStroke(document);
                     }
                 }
             } catch (e) {
