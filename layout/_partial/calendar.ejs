@@ -20,6 +20,12 @@
         padding: 6px;
         box-sizing: border-box;
     }
+    /* canvas 内的格子 DarkReader 无法处理，容器背景/边框也随暗色模式一并切换 */
+    html.dark #post-calendar {
+        background-color: rgba(30, 30, 30, 0.6);
+        border-color: #3a3f44;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
     @media (max-width: 420px) {
         .archive-calendar {
             display: none !important;
@@ -65,24 +71,46 @@ function initPostCalendar() {
     }
     datePosts += ']'; %>
 
+    // canvas 内容 DarkReader 无法覆盖，按当前暗色模式显式选配色
+    var isDark = !!(window.DarkReader && window.DarkReader.isEnabled());
+    var palette = isDark ? {
+        title: '#c9d1d9',
+        label: '#8b949e',
+        baseCell: '#21262d',
+        cellBorder: '#1e1e1e',
+        levels: ['#161b22', '#0e4429', '#006d32', '#26a641', '#39d353'],
+        tooltipBg: 'rgba(40, 44, 52, 0.95)',
+        tooltipBorder: '#4a5159',
+        tooltipText: '#e0e0e0'
+    } : {
+        title: '#3C4858',
+        label: '#333',
+        baseCell: '#EEEEEE',
+        cellBorder: '#FFF',
+        levels: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127'],
+        tooltipBg: '#eee',
+        tooltipBorder: '#aaa',
+        tooltipText: '#333'
+    };
+
     let option = {
         title: {
             top: 0,
             text: '文章日历',
             left: 'left',
             textStyle: {
-                color: '#3C4858',
+                color: palette.title,
                 fontSize: 14
             }
         },
         tooltip: {
             padding: 10,
-            backgroundColor: '#eee',
-            borderColor: '#aaa',
+            backgroundColor: palette.tooltipBg,
+            borderColor: palette.tooltipBorder,
             borderWidth: 1,
             formatter: function (obj) {
                 var value = obj.value;
-                return '<div style="font-size: 14px;">' + value[0] + '：' + value[1] + '</div>';
+                return '<div style="font-size: 14px; color: ' + palette.tooltipText + ';">' + value[0] + '：' + value[1] + '</div>';
             }
         },
         visualMap: {
@@ -91,9 +119,12 @@ function initPostCalendar() {
             showLabel: true,
             categories: [0, 1, 2, 3, 4],
             calculable: true,
+            textStyle: {
+                color: palette.label
+            },
             inRange: {
                 symbol: 'rect',
-                color: ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']
+                color: palette.levels
             },
             itemWidth: 8,
             itemHeight: 8,
@@ -112,8 +143,8 @@ function initPostCalendar() {
             itemStyle: {
                 width: '1.88679%',
                 height: '15px',
-                color: '#EEEEEE',
-                borderColor: '#FFF',
+                color: palette.baseCell,
+                borderColor: palette.cellBorder,
                 borderWidth: 2
             },
             yearLabel: {
@@ -122,14 +153,16 @@ function initPostCalendar() {
             monthLabel: {
                 nameMap: 'cn',
                 fontWeight: 'lighter',
-                fontSize: 10
+                fontSize: 10,
+                color: palette.label
             },
             dayLabel: {
                 show: true,
                 formatter: '{start}  1st',
                 fontWeight: 'lighter',
                 nameMap: ['日',' ',' ','三',' ',' ','六',],
-                fontSize: 12
+                fontSize: 12,
+                color: palette.label
             }
         }],
         series: [{
@@ -182,5 +215,9 @@ if (!window._calendarFirstInitialized) {
   };
   // 绑定新的
   window.addEventListener('resize', /*window.*/_calendarResizeHandler);
+  // 暗黑模式切换后重绘（DarkReader 改不了 canvas，必须重建图表）
+  window.addEventListener('darkmode-change', function () {
+    if (document.getElementById('post-calendar')) initPostCalendar();
+  });
 }
 </script>
