@@ -906,7 +906,9 @@ abbr[title] {
   border-radius: 0;
   background: #ffffff;
   color: #363636;
-  line-height: 1.6;
+  /* 行高沿用 A4 原始值：14.8px 字号下 20.48px（≈1.384），
+     不用 solitude 的 1.6（23.68px），避免行间距偏大 */
+  line-height: 1.384;
 }
 .post-md .highlight-container .highlight table {
   display: block;
@@ -936,7 +938,7 @@ abbr[title] {
   /* 显式继承：A4 旧规则 .gutter pre{font-size:.85em} 会把行号缩小，
      导致行高与代码列逐行累积错位 */
   font-size: inherit;
-  line-height: 1.6;
+  line-height: 1.384;
   text-align: center;
 }
 .post-md .highlight-container .highlight .code pre {
@@ -944,7 +946,7 @@ abbr[title] {
   padding: 8px 0.9rem;
   background: none;
   color: #363636;
-  line-height: 1.6;
+  line-height: 1.384;
 }
 
 /* 裸 pre（缩进式代码块）：与 figure 代码区同风格 */
@@ -956,7 +958,7 @@ abbr[title] {
   background: #ffffff;
   color: #363636;
   font-size: 14.8px;
-  line-height: 1.6;
+  line-height: 1.384;
   overflow-x: auto;
 }
 .post-md .highlight-container .highlight .line {
