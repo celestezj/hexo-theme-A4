@@ -616,49 +616,8 @@ var optionalJsFiles = {
         const modal = document.getElementById('lcl-search-modal');
         if (modal) modal.style.display = 'none';
 
-        // 4. 重新初始化代码块复制按钮（对code-copy.js代码进行了pjax适配）
-        // 先清空所有旧按钮（必须）
-        document.querySelectorAll('.code-copy-btn').forEach(btn => btn.remove());
-        document.querySelectorAll('figure.highlight').forEach(fig => {
-        let wrapper;
-        // 如果已有容器，直接使用，不重复创建
-        if (fig.parentNode.classList.contains('highlight-container')) {
-            wrapper = fig.parentNode;
-        }
-        // 没有容器，才创建新容器
-        else {
-            wrapper = document.createElement('div');
-            wrapper.className = 'highlight-container';
-            fig.parentNode.insertBefore(wrapper, fig);
-            wrapper.appendChild(fig);
-        }
-        // 无论如何，都创建新按钮（解决回退后退按钮消失）
-        const btn = document.createElement('button');
-        btn.className = 'code-copy-btn';
-        // btn.textContent = 'copy';
-        btn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-        wrapper.appendChild(btn);
-        // 每次都重新绑定事件（确保浏览器后退后也能点击）
-        btn.onclick = async () => {
-            try {
-            const codeEl = fig.querySelector('td.code pre');
-            const text = codeEl.innerHTML
-                .replace(/<br>/g, '\n')
-                .replace(/<[^>]+>/g, '')
-                .replace(/&lt;/g, '<')
-                .replace(/&gt;/g, '>')
-                .replace(/&amp;/g, '&')
-                .trim();
-            await navigator.clipboard.writeText(text);
-            // btn.textContent = 'copied';
-            btn.innerHTML = '<i class="fa-solid fa-check"></i>';
-            // setTimeout(() => btn.textContent = 'copy', 1500);
-            setTimeout(() => btn.innerHTML = '<i class="fa-regular fa-copy"></i>', 1500);
-            } catch (e) {
-            // console.warn('复制失败', e);
-            }
-        };
-        });
+        // 4. 代码块无需 pjax 处理：wrapper/工具条/按钮在构建期已写入 HTML，
+        // 复制点击由 document 级事件委托承接（见 scripts/code-copy.js 注入脚本）
 
         // 5. 重置返回顶部按钮
         <% if (theme.tool.returnToTop) { %>

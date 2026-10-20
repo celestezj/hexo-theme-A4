@@ -9,10 +9,6 @@
     align-content: center;
 }
 /*new add ↓*/
-/*pre code预格式化文本块文字颜色*/
-.post-md pre code {
-    color: rgb(197, 195, 189);
-}
 /*mermaid流程图背景颜色*/
 .post-md pre.mermaid {
     background: #ffffff;
@@ -408,9 +404,6 @@ span[alt='wavy'] {
 /*官方codeblock标签插件适配（https://hexo.io/zh-cn/docs/tag-plugins）*/
 .post-md .highlight, .post-md pre {
   padding: 12px 20px;
-}
-.post-md .highlight figcaption {
-  padding-right: 40px !important;
 }
 /* 归档页文章标题增加悬浮提示（用于显示文章summary） */
 .archive-tooltip {
@@ -809,4 +802,207 @@ abbr[title] {
 }
 .peach-empty {
   color: var(--font-color-3);
+}
+
+/* =====================================================================
+ * 代码块：移植 hexo-theme-solitude default 风格（VS Code 亮色配色）
+ * 亮色值与 solitude 完全一致；暗色由 DarkReader 运行时转换（A4 无暗色变量体系）
+ * solitude: source/css/_highlight/{index,highlight/diff,color}.styl
+ * ===================================================================== */
+
+/* 容器：圆角边框 + hover 阴影（对应 solitude figure.highlight） */
+.post-md .highlight-container {
+  position: relative;
+  margin: 0.5rem 0;
+  border: 1px solid #e3e8f7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+/* 悬浮阴影特效已按要求关闭
+.post-md .highlight-container {
+  transition: box-shadow 0.2s ease;
+}
+.post-md .highlight-container:hover {
+  box-shadow: 0 8px 16px -4px rgba(44, 45, 48, 0.05);
+}
+*/
+
+/* 顶部通栏（语言名 + 可选标题/参考链接 + 复制按钮），
+   右侧预留空间给绝对定位的复制按钮 */
+.post-md .highlight-container .highlight-tools {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 2.15em;
+  padding: 0 2.4rem 0 0.9rem;
+  font-size: 15px;
+  background: #f7f7f9;
+  border-bottom: 1px solid #e3e8f7;
+  user-select: none;
+}
+.post-md .highlight-tools .code-lang {
+  flex-shrink: 0;
+  font-size: 1.05em;
+  font-weight: 700;
+  text-transform: capitalize;
+  color: #363636;
+  white-space: nowrap;
+}
+/* {% codeblock %} 标题：可选项，超长省略 + 原生 tooltip */
+.post-md .highlight-tools .code-title {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #363636;
+}
+/* {% codeblock %} 参考链接：可选项，靠右，最长占 45%，超长省略 */
+.post-md .highlight-tools .code-link {
+  flex: 0 1 auto;
+  margin-left: auto;
+  max-width: 45%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(60, 60, 67, 0.6);
+  /* 关闭 A4 正文链接的假下划线（box-shadow）与真下划线 */
+  text-decoration: none;
+  box-shadow: none;
+}
+.post-md .highlight-tools .code-link:hover {
+  color: #b73231;
+  text-decoration: none;
+  box-shadow: none;
+}
+
+/* 复制按钮：移入工具条右侧（覆盖默认按钮外观） */
+.post-md .highlight-container .code-copy-btn {
+  position: absolute;
+  top: 0;
+  right: 0.4rem;
+  z-index: 10;
+  height: 2.15em;
+  padding: 0 0.4rem;
+  border: none;
+  background: none;
+  color: #363636;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.post-md .highlight-container .code-copy-btn:hover {
+  color: #b73231;
+}
+
+/* figure 本体：白底、去 A4 Tomorrow 主题的旧边框/内边距 */
+.post-md .highlight-container figure.highlight {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+  color: #363636;
+  line-height: 1.6;
+}
+.post-md .highlight-container .highlight table {
+  display: block;
+  margin: 0;
+  width: auto;
+  border: none;
+  background: none;
+  overflow-x: auto;
+}
+.post-md .highlight-container .highlight td {
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: none;
+  vertical-align: top;
+}
+
+/* 行号列：浅灰底 + 右边框 + 居中（对应 solitude td.gutter） */
+.post-md .highlight-container .highlight .gutter pre {
+  margin: 0;
+  padding: 8px 0.6rem;
+  background: #f7f7f9;
+  border: none;
+  border-right: 1px solid #e3e8f7;
+  border-radius: 0;
+  color: rgba(60, 60, 67, 0.6);
+  /* 显式继承：A4 旧规则 .gutter pre{font-size:.85em} 会把行号缩小，
+     导致行高与代码列逐行累积错位 */
+  font-size: inherit;
+  line-height: 1.6;
+  text-align: center;
+}
+.post-md .highlight-container .highlight .code pre {
+  margin: 0;
+  padding: 8px 0.9rem;
+  background: none;
+  color: #363636;
+  line-height: 1.6;
+}
+
+/* 裸 pre（缩进式代码块）：与 figure 代码区同风格 */
+.post-md .highlight-container > pre {
+  margin: 0;
+  padding: 8px 0.9rem;
+  border: none;
+  border-radius: 0;
+  background: #ffffff;
+  color: #363636;
+  font-size: 14.8px;
+  line-height: 1.6;
+  overflow-x: auto;
+}
+.post-md .highlight-container .highlight .line {
+  height: auto;
+}
+.post-md .highlight-container .highlight .line.marked {
+  background-color: rgba(97, 97, 97, 0.314);
+}
+
+/* token 配色：solitude default 亮色（VS Code Light+） */
+.post-md .highlight .keyword,
+.post-md .highlight .attr,
+.post-md .highlight .variable,
+.post-md .highlight .literal,
+.post-md .highlight .property {
+  color: #0000ff;
+}
+.post-md .highlight .number {
+  color: #098658;
+}
+.post-md .highlight .string {
+  color: #a31515;
+}
+.post-md .highlight .built_in,
+.post-md .highlight .title,
+.post-md .highlight .params,
+.post-md .highlight .name {
+  color: #795e26;
+}
+.post-md .highlight .emphasis {
+  color: #0451a5;
+}
+
+/* 其余 token 在 solitude 中不着色（继承前景色），
+   显式重置 A4 Tomorrow 主题（style1.css）给它们的颜色 */
+.post-md .highlight .comment,
+.post-md .highlight .tag,
+.post-md .highlight .attribute,
+.post-md .highlight .regexp,
+.post-md .highlight .preprocessor,
+.post-md .highlight .constant,
+.post-md .highlight .class,
+.post-md .highlight .value,
+.post-md .highlight .inheritance,
+.post-md .highlight .header,
+.post-md .highlight .symbol,
+.post-md .highlight .function {
+  color: inherit;
 }
