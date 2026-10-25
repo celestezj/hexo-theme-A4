@@ -531,7 +531,7 @@ var optionalJsFiles = {
                     input.value = '';
                     results.innerHTML = '';
                     input.placeholder = "输入关键词搜索文章...";
-                    input?.focus();
+                    if (input) input.focus();
                 }
                 }
                 if (e.key === 'Escape') {
@@ -539,11 +539,11 @@ var optionalJsFiles = {
                 }
             });
 
-            modal?.addEventListener('click', (e) => {
+            if (modal) modal.addEventListener('click', (e) => {
                 if (e.target === modal) {modal.style.display = 'none';}
             });
 
-            input?.addEventListener('input', function(e) {
+            if (input) input.addEventListener('input', function(e) {
                 const q = e.target.value.trim().toLowerCase();
                 results.innerHTML = '';
                 if (!q || !window.searchData.length) return;

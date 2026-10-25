@@ -29,4 +29,4 @@ window.addHeaderMark = addHeaderMark;
 </body>
 `;
   return html.replace('</body>', js);
-});
+}, 9);

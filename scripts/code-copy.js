@@ -178,4 +178,4 @@ hexo.extend.filter.register('after_render:html', function(html) {
 </script>`;
 
   return html.replace('</body>', runtime + '\n</body>');
-});
+}, 9);
