@@ -4,7 +4,8 @@ var siteStart = Date.UTC(2026, 3, 1);
 var nowCST = Date.now() + 8 * 60 * 60 * 1000;
 var runningDays = Math.floor((nowCST - siteStart) / (24 * 60 * 60 * 1000));
 var buildDate = new Date(nowCST);
-var deployDateText = buildDate.getUTCFullYear() + '年' + (buildDate.getUTCMonth() + 1) + '月' + buildDate.getUTCDate() + '日';
+var pad2 = function(n) { return n < 10 ? '0' + n : '' + n; };
+var deployDateText = buildDate.getUTCFullYear() + '年' + (buildDate.getUTCMonth() + 1) + '月' + buildDate.getUTCDate() + '日 ' + pad2(buildDate.getUTCHours()) + ':' + pad2(buildDate.getUTCMinutes());
 %>
 <div class="footer">
     <% if(path != 'index.html') { %>
