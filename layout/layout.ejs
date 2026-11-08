@@ -386,7 +386,7 @@ var optionalJsFiles = {
         <% if (theme.no_internet_local_deploy) { %>
             <script src="/js/mermaid.min.js"></script> <!--script src="<%= cdn_theme_url('js/mermaid.min.js') %>"></script-->
         <% } else { %>
-            <script src="https://cdn.jsdmirror.cn/npm/mermaid@<%= config.mermaid.version %>/dist/mermaid.min.js"></script>
+            <script src="<%= (config.mermaid.url || 'https://cdn.jsdmirror.cn/npm/mermaid@{version}/dist/mermaid.min.js').replace('{version}', config.mermaid.version) %>"></script>
         <% } %>
         <script>
             if (window.mermaid) {
