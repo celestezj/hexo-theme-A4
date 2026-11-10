@@ -770,6 +770,20 @@ html {
 .index-main {
   padding: 36px clamp(10px, 4.5vw, 50px) 0;
 }
+/* 首页正文的首个渲染元素：菜单自带 margin-bottom:12px，若首元素是段落还会再叠
+   12px 上边距。只应去掉「首个元素」的上边距，不能用 p:first-of-type —— 首元素
+   可能是图片（raw HTML），那样会误命中图片后面的段落，把图文间距抹掉。
+   hexo-reference-new 会往正文注入 <html><head><link></head><body>，浏览器只保留
+   <link> 作为首个子元素，故用 link + * 找到真正的首个内容元素。 */
+.index-main .post-md > :first-child:not(link),
+.index-main .post-md > link + * {
+  margin-top: 0;
+}
+/* 首个内容元素恰为段落（文字/徽标行）时，行盒按 1.4 收紧 */
+.index-main .post-md > p:first-child,
+.index-main .post-md > link + p {
+  line-height: 1.4;
+}
 
 /* abbr 缩写点线：显式补上 UA 默认样式。老版 WKWebView（iPadOS/iOS 18 及以前）
    不支持无前缀的 text-decoration 简写带线型值，需 -webkit- 前缀，否则无下划线 */
