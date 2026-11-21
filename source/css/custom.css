@@ -828,7 +828,9 @@ abbr[title] {
 .post-md .highlight-container {
   position: relative;
   margin: 0.5rem 0;
-  border: 1px solid #e3e8f7;
+  /* 与 details 边框同色（#d8d8d8）：纯中性灰经 DarkReader 反色后仍是灰色，
+     而原来的蓝调 #e3e8f7 暗色下会偏蓝 */
+  border: 1px solid #d8d8d8;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -852,7 +854,7 @@ abbr[title] {
   padding: 0 2.4rem 0 0.9rem;
   font-size: 15px;
   background: #f7f7f9;
-  border-bottom: 1px solid #e3e8f7;
+  border-bottom: 1px solid #d8d8d8;
   user-select: none;
 }
 .post-md .highlight-tools .code-lang {
@@ -946,7 +948,7 @@ abbr[title] {
   padding: 8px 0.6rem;
   background: #f7f7f9;
   border: none;
-  border-right: 1px solid #e3e8f7;
+  border-right: 1px solid #d8d8d8;
   border-radius: 0;
   color: rgba(60, 60, 67, 0.6);
   /* 显式继承：A4 旧规则 .gutter pre{font-size:.85em} 会把行号缩小，
