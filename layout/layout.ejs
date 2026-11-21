@@ -173,6 +173,9 @@ var cdnEnabled = is_cdn_enabled();
                         document.head.appendChild(s);
                     }
                 <% } %>
+
+                // footer 位于 #paper-content 内，跳转后会被目标页 HTML 覆盖，需重新计算运行天数
+                if (typeof window.updateSiteRunningDays === 'function') window.updateSiteRunningDays();
             });
         </script>
         <% } %>
@@ -732,6 +735,34 @@ var optionalJsFiles = {
     <% } %>
     </script>
 <% } %>
+
+<script>
+// 站点运行天数：按访客本地时间动态计算，服务端渲染的 title 作为兜底
+(function () {
+    function updateSiteRunningDays() {
+        var el = document.getElementById('site-running-days');
+        if (!el) return;
+        try {
+            var startMs = parseInt(el.getAttribute('data-site-start-ms'), 10);
+            if (!isFinite(startMs)) return;
+            var nowCST = Date.now() + 8 * 3600 * 1000;
+            var days = Math.floor((nowCST - startMs) / 86400000);
+            var buildDays = parseInt(el.getAttribute('data-build-days'), 10);
+            if (isFinite(buildDays) && days < buildDays) days = buildDays;
+            el.title = '小破站已经运行了' + days + '+天，最后一次部署时间为' +
+                (el.getAttribute('data-deploy-text') || '');
+        } catch (e) {
+            // 计算失败时保留服务端渲染的静态 title
+        }
+    }
+    window.updateSiteRunningDays = updateSiteRunningDays;
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', updateSiteRunningDays);
+    } else {
+        updateSiteRunningDays();
+    }
+})();
+</script>
 </html>
 <% if (is_cdn_enabled()) { %>
     <%#- js(cdn_theme_url('js/emojiHandler.js')) %>
